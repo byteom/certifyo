@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "npm install --legacy-peer-deps && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -32,10 +32,10 @@
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "lucide-react": "^0.510.0",
-    "qrcode.react": "^3.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-helmet-async": "^2.0.4",
+    "react-qr-code": "^2.0.15",
     "react-router-dom": "^6.30.0",
     "react-share": "^5.1.0",
     "react-tooltip": "^5.28.0",

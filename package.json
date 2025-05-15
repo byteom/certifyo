@@ -34,7 +34,6 @@
     "lucide-react": "^0.510.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-helmet-async": "^2.0.4",
     "react-qr-code": "^2.0.15",
     "react-router-dom": "^6.30.0",
     "react-share": "^5.1.0",

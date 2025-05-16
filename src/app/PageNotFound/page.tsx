@@ -1,5 +1,5 @@
-const PageNotFound = () => {
-  return <div>404 Page</div>;
+const NotFound = () => {
+  return <div>404 - Page Not Found</div>;
 };
 
-export default PageNotFound;
+export default NotFound;

@@ -1,5 +1,9 @@
-const 404 = () => {
-  return <div>404 Page</div>;
-};
+import React from 'react'
 
-export default 404;
+const PageNotFound = () => {
+  return (
+    <div>PageNotFound</div>
+  )
+}
+
+export default PageNotFound

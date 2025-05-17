@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   User, Award, BookOpen, Sun, Moon, Menu, X as XIcon, LogOut,
-  Settings, AlignCenterVertical as Certificate, Briefcase, Video, Trophy
+  Settings, AlignCenterVertical as Certificate,   Video, Trophy
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';

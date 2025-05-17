@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraduationCap, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { GraduationCap, Twitter, Linkedin, Instagram } from 'lucide-react';
 import { useThemeStore } from '../store/themeStore';
 import Image from 'next/image';
 

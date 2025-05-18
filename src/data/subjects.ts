@@ -1,5 +1,5 @@
 
-import { Subject } from '@/types/types';
+import { Subject } from '@/types';
 
 import { webDevelopment } from './subjects/web-development';
 import { dataScience } from './subjects/data-science';

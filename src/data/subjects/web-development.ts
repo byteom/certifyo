@@ -1,5 +1,5 @@
 
-import { Subject } from "@/types/types";
+import { Subject } from "@/types";
 export const webDevelopment: Subject = {
     id: 1,
     name: "Web Development",

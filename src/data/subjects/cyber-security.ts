@@ -1,5 +1,5 @@
 
-import { Subject } from "@/types/types"
+import { Subject } from "@/types"
 export const   cyberSecurity: Subject = {
     id: 7,
     name: "Cyber Security",

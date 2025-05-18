@@ -201,7 +201,7 @@ export default function PrivacyPolicy() {
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Children's Privacy</h2>
+          <h2 className="text-2xl font-semibold mb-4">Childrens Privacy</h2>
           <p className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>
             {privacyPolicy.childrensPrivacy}
           </p>

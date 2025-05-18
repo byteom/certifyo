@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useThemeStore } from '@/store/themeStore';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
@@ -52,6 +52,59 @@ export default function InternshipPage() {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showLimitError, setShowLimitError] = useState(false);
 
+  const loadProfile = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('full_name, phone')
+        .eq('id', user.id)
+        .single();
+
+      if (error) throw error;
+      setProfile(data);
+    } catch (error: unknown) {
+      console.error('Error loading profile:', error);
+    }
+  }, [user]);
+
+  const loadInternships = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('internships')
+        .select('*')
+        .eq('status', 'active');
+
+      if (error) throw error;
+      setInternships(data || []);
+    } catch (error: unknown) {
+      console.error('Error loading internships:', error);
+      setError(error instanceof Error ? error.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadApplications = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('internship_applications')
+        .select(`
+          *,
+          internships (*)
+        `)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      setApplications(data || []);
+    } catch (error: unknown) {
+      console.error('Error loading applications:', error);
+    }
+  }, [user]);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (window.innerWidth < 768) {
@@ -73,60 +126,7 @@ export default function InternshipPage() {
       loadApplications();
       loadProfile();
     }
-  }, [user]);
-
-  const loadProfile = async () => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('full_name, phone')
-        .eq('id', user.id)
-        .single();
-
-      if (error) throw error;
-      setProfile(data);
-    } catch (error) {
-      console.error('Error loading profile:', error);
-    }
-  };
-
-  const loadInternships = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('internships')
-        .select('*')
-        .eq('status', 'active');
-
-      if (error) throw error;
-      setInternships(data || []);
-    } catch (error: any) {
-      console.error('Error loading internships:', error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadApplications = async () => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('internship_applications')
-        .select(`
-          *,
-          internships (*)
-        `)
-        .eq('user_id', user.id);
-
-      if (error) throw error;
-      setApplications(data || []);
-    } catch (error: any) {
-      console.error('Error loading applications:', error);
-    }
-  };
+  }, [user, loadApplications, loadProfile]);
 
   const checkApplicationLimit = () => {
     const activeApplications = applications.filter(app => 
@@ -172,9 +172,9 @@ export default function InternshipPage() {
       setShowSuccessPopup(true);
       loadApplications();
       setSelectedInternship(null);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error applying for internship:', error);
-      setError(error.message);
+      setError(error instanceof Error ? error.message : 'An error occurred');
       setTimeout(() => setError(''), 3000);
     }
   };

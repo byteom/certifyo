@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AlertTriangle, 
   //  Maximize
@@ -8,13 +7,11 @@ import { useThemeStore } from '../../store/themeStore';
 interface ExamWarningProps {
   warningCount: number;
   maxWarnings: number;
-  // onClose: () => void;
+  onClose: () => void;
   onReturnToExam: () => void;
 }
 
-export default function ExamWarning({ warningCount, maxWarnings,
-  //  onClose,
-    onReturnToExam }: ExamWarningProps) {
+export default function ExamWarning({ warningCount, maxWarnings, onClose, onReturnToExam }: ExamWarningProps) {
   const isDarkMode = useThemeStore(state => state.isDarkMode);
 
   return (

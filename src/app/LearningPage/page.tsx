@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useThemeStore } from '@/store/themeStore';
-import { BookOpen, Video, Users, Rocket, ArrowRight } from 'lucide-react';
+import { BookOpen, Video, Rocket, ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function LearningPage() {
@@ -61,14 +61,16 @@ export default function LearningPage() {
               Coming Soon!
             </h2>
             <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              We're working hard to bring you the best learning experience.
+              We are working hard to bring you the best learning experience.
             </p>
           </div>
 
           <div className="max-w-md mx-auto">
-            <div className="flex gap-4">
+            <form onSubmit={handleJoinWaitlist} className="flex gap-4">
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email for early access"
                 className={`flex-1 rounded-md ${
                   isDarkMode
@@ -76,11 +78,11 @@ export default function LearningPage() {
                     : 'border-gray-300 placeholder-gray-400'
                 }`}
               />
-              <button className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 flex items-center">
+              <button type="submit" className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 flex items-center">
                 Join Waitlist
                 <ArrowRight className="ml-2 h-4 w-4" />
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>

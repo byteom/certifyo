@@ -1,7 +1,5 @@
 import React from 'react';
-import { AlertTriangle, 
-  //  Maximize
-   } from 'lucide-react';
+import { AlertTriangle, X } from 'lucide-react';
 import { useThemeStore } from '../../store/themeStore';
 
 interface ExamWarningProps {
@@ -16,7 +14,13 @@ export default function ExamWarning({ warningCount, maxWarnings, onClose, onRetu
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} p-8 rounded-lg shadow-xl max-w-md w-full mx-4`}>
+      <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} p-8 rounded-lg shadow-xl max-w-md w-full mx-4 relative`}>
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <X className="h-5 w-5" />
+        </button>
         <div className="flex items-center mb-4">
           <AlertTriangle className="h-6 w-6 text-yellow-500 mr-2" />
           <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Warning!</h3>

@@ -1,3 +1,10 @@
+export interface Question {
+  id: string | number;
+  text: string;
+  options: string[];
+  correctAnswer: number;
+}
+
 export interface Internship {
   id: string;
   title: string;
@@ -24,4 +31,21 @@ export interface Application {
 export interface Profile {
   full_name: string | null;
   phone: string | null;
+}
+
+export interface Exam {
+  id: string | number;
+  title: string;
+  duration: number;
+  subject?: string;
+  passingScore?: number;
+  questions?: Question[];
+}
+
+export interface Subject {
+  id: string | number;
+  name: string;
+  description: string;
+  image: string;
+  exams: Exam[];
 }

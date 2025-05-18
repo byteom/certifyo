@@ -20,8 +20,8 @@ interface Internship {
   duration: string;
   stipend: number;
   location: string;
-  requirements: string;
   type: string;
+  requirements: string[];
 }
 
 interface Application {

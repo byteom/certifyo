@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,8 +9,9 @@ import {
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
 import AuthModal from './AuthModal';
-import { useRouter } from 'next/router';
-import logo from '/public/logo.png';
+import { useRouter, usePathname } from 'next/navigation';
+
+
 
 export default function Navigation() {
   const [authModal, setAuthModal] = useState<{ isOpen: boolean; mode: 'signin' | 'signup' }>({
@@ -22,6 +24,7 @@ export default function Navigation() {
   const { user, signOut } = useAuthStore();
   const { isDarkMode, toggleTheme } = useThemeStore();
   const router = useRouter();
+  const pathname = usePathname();
 
   // Refs for dropdowns
   const eventDropdownRef = useRef<HTMLDivElement>(null);
@@ -50,10 +53,10 @@ export default function Navigation() {
   };
 
   const handleVerifyCertificate = () => {
-    if (router.pathname !== '/certificates') {
+    if (pathname !== '/certificates') {
       router.push('/certificates');
     }
-    if (router.pathname === '/certificates') {
+    if (pathname === '/certificates') {
       document.getElementById('verify-certificate-section')?.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -71,12 +74,13 @@ export default function Navigation() {
             <div className="flex items-center">
               <Link href="/" className="flex items-center">
                 <Image
-                  src={logo}
-                  alt="logo"
-                  width={32}
-                  height={32}
-                  className={`h-8 w-8 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}
-                />
+            src="/logo.png" // ✅ Correct way to use public assets
+            alt="logo"
+          width={32}
+            height={32}
+          className={`h-8 w-8 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}
+            />
+
                 <span className="ml-2 text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent tracking-tighter">
                   CertifyO
                 </span>

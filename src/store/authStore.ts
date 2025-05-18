@@ -1,3 +1,6 @@
+// src/store/authStore.ts
+'use client';
+
 import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
@@ -27,7 +30,6 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     if (signUpError) throw signUpError;
 
-    // Create profile entry with email and phone
     if (authData.user) {
       const { error: profileError } = await supabase
         .from('profiles')

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Github, Linkedin, Globe, MapPin, Phone, Mail, Sparkles, User, BookOpen, Languages, Heart, Code, Globe2 } from 'lucide-react';
+import { Github, Linkedin, Globe, MapPin, Phone, Mail, User, BookOpen, Languages, Heart, Code, Globe2 } from 'lucide-react';
 import { useThemeStore } from '../../store/themeStore';
 
 interface ProfileViewProps {

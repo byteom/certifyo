@@ -1,12 +1,13 @@
-// import { Subject } from '../../types';
-import { Subject } from '@/types/types';
 
+import { Subject } from '@/types/types';
 export const cloudComputing: Subject = {
     id: 4,
     name: "Cloud Computing",
     description: "Master cloud platforms, serverless architecture, and cloud-native development practices.",
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800",
+ 
     exams: [
+ 
       {
         "id": 11,
         "title": "Cloud Architecture Fundamentals",
@@ -682,7 +683,8 @@ export const cloudComputing: Subject = {
             "options": [
               "It uses a shared database for all services to ensure consistency",
               "It relies on eventual consistency with patterns such as CQRS and Event Sourcing",
-              "It doesn’t handle consistency and leaves that to the client-side",
+
+     "It doesn’t handle consistency and leaves that to the client-side",
               "It requires each service to replicate all data to others to ensure consistency"
             ],
             "correctAnswer": 1

@@ -1,3 +1,4 @@
+
 import { Subject } from "@/types/types";
 export const devOps: Subject ={
     id: 3,

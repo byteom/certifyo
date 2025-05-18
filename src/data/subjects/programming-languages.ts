@@ -1,3 +1,4 @@
+
 import { Subject } from "@/types/types"
 export const programmingLanguages: Subject = {
     id: 4,

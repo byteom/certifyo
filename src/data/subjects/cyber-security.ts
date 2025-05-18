@@ -1,3 +1,4 @@
+
 import { Subject } from "@/types/types"
 export const   cyberSecurity: Subject = {
     id: 7,

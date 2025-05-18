@@ -1,4 +1,6 @@
+
 import { Subject } from "@/types/types"
+
 export const machineLearning: Subject = {
     id: 5,
     name: "Machine Learning",

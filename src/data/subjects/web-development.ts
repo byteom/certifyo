@@ -1,3 +1,4 @@
+
 import { Subject } from "@/types/types";
 export const webDevelopment: Subject = {
     id: 1,

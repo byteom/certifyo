@@ -10,7 +10,7 @@ interface Internship {
   duration: string;
   stipend: number;
   location: string;
-  requirements: string;
+  requirements: string[];
   type: string;
 }
 
@@ -100,9 +100,14 @@ export default function InternshipDetails({ internship, onClose, onApply }: Inte
               Requirements
             </h3>
             <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-gray-700/30' : 'bg-gray-50'} border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-              <p className={`whitespace-pre-wrap leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                {internship.requirements}
-              </p>
+              <ul className="space-y-2">
+                {internship.requirements.map((req, index) => (
+                  <li key={index} className={`flex items-start ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <span className={`w-3 h-3 rounded-full ${isDarkMode ? 'bg-gray-400' : 'bg-gray-500'} mr-3`} />
+                    <p className="leading-relaxed">{req}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 

@@ -11,6 +11,7 @@ interface Internship {
   stipend: number;
   location: string;
   type: string;
+  requirements: string[];
 }
 
 interface InternshipCardProps {

@@ -53,8 +53,10 @@ function HomePage() {
 
   const features = [
     { icon: Award, title: "Professional Certifications", description: "Earn industry-recognized certificates through comprehensive exams and practical assessments.", link: "/certificates" },
-    { icon: BookOpen, title: "Expert-Led Learning", description: "Access high-quality courses taught by industry professionals with real-world experience.", link: "/learning" },
-    { icon: Briefcase, title: "Career Internships", description: "Gain hands-on experience through our partnered internship programs with top companies.", link: "/internships" },
+    // { icon: BookOpen, title: "Expert-Led Learning", description: "Access high-quality courses taught by industry professionals with real-world experience.", link: "/learning" },
+    { icon: BookOpen, title: "Expert-Led Learning", description: "Access high-quality courses taught by industry professionals with real-world experience.", link: "/LearningPage" },
+    // { icon: Briefcase, title: "Career Internships", description: "Gain hands-on experience through our partnered internship programs with top companies.", link: "/internships" },
+    { icon: Briefcase, title: "Career Internships", description: "Gain hands-on experience through our partnered internship programs with top companies.", link: "/InternshipPage" },
     { icon: Video, title: "Video Tutorials", description: "Learn at your own pace with our extensive library of high-quality video content.", link: "/learning" },
     { icon: Trophy, title: "Skill Competitions", description: "Test your knowledge against peers and win exciting prizes and recognition.", link: "/competitions" },
     { icon: Globe, title: "Global Community", description: "Connect with professionals worldwide through our exclusive networking platform.", link: "/community" }

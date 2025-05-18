@@ -1,4 +1,5 @@
-import { Subject } from '@/components/types';
+
+import { Subject } from "@/types/types"
 export const programmingLanguages: Subject = {
     id: 4,
     name: "Programming Languages",

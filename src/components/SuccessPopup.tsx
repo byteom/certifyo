@@ -13,7 +13,7 @@ export const SuccessPopup = ({ isDarkMode, onClose }: SuccessPopupProps) => (
         Application Submitted!
       </h3>
       <p className={`mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-        Thanks for applying to the internship on CertifyO. You will receive your Letter of Recommendation (LOR) within 24-48 hours, after which you can begin your internship journey.
+        Thanks for applying to the internship on CertifyO. You&apos;ll receive your Letter of Recommendation (LOR) within 24-48 hours, after which you can begin your internship journey.
       </p>
       <div className="flex items-center justify-center gap-2 mb-6">
         <Mail className={`h-5 w-5 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />

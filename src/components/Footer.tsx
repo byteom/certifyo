@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import { GraduationCap, Twitter, Linkedin, Instagram } from 'lucide-react';
 import { useThemeStore } from '../store/themeStore';

@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useCallback } from 'react';
 import { X, Mail, Lock, Github, Chrome, Sun, Moon, Phone, Eye, EyeOff } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';

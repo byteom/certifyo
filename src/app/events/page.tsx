@@ -99,7 +99,7 @@ const EventsPage: React.FC = () => {
               <p className={`text-lg mb-4 ${isDarkMode ? 'text-indigo-200' : 'text-indigo-700'}`}>
                 Generate your participation certificates for attended events
               </p>
-              <Link href="/hackathon-certificate-generate">
+              <Link href="/generatehackathoncertificate">
   <motion.button
     whileHover={{ scale: 1.03 }}
     whileTap={{ scale: 0.97 }}

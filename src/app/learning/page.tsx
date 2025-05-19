@@ -13,7 +13,7 @@ export default function LearningPage() {
   const handleJoinWaitlist = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Implement email submission logic
-    router.push('/thank-you');
+    // router.push('/thank-you');
   };
 
   return (
@@ -72,7 +72,7 @@ export default function LearningPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email for early access"
-                className={`flex-1 rounded-md ${
+                className={`flex-1 p-2 rounded-md ${
                   isDarkMode
                     ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
                     : 'border-gray-300 placeholder-gray-400'

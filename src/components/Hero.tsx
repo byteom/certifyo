@@ -19,6 +19,7 @@ export default function Hero() {
     { name: 'DevOps', icon: Briefcase, color: 'text-amber-500' },
     { name: 'Blockchain', icon: Code, color: 'text-green-500' }
   ];
+  
 
   return (
     <div className={`relative max-h-screen w-full overflow-hidden ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
@@ -29,7 +30,8 @@ export default function Hero() {
         {/* Floating dots pattern */}
         {Array.from({ length: 30 }).map((_, i) => (
           <motion.div
-            key={i}
+            // key={i}
+            key={crypto.randomUUID()}
             className={`absolute rounded-full ${isDarkMode ? 'bg-indigo-900/30' : 'bg-indigo-100/70'}`}
             style={{
               width: Math.random() * 10 + 5,

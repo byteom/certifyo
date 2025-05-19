@@ -31,10 +31,10 @@ export default function Footer() {
               {[
                 { text: 'About Us', href: '/about' },
                 { text: 'Subjects', href: '/subjects' },
-                { text: 'Exams', href: '/exams' },
+                { text: 'Exams', href: '/subjects' },
                 { text: 'Certificates', href: '/certificates' },
               ].map((item) => (
-                <li key={item.href}>
+                <li key={item.text}>
                   <a 
                     href={item.href} 
                     className={`text-sm transition-colors duration-200 ${
@@ -54,13 +54,13 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4 tracking-tight">Support</h3>
             <ul className="space-y-3">
               {[
-                { text: 'Help Center', href: '/help' },
+                { text: 'Help Center', href: '/contact' },
                 { text: 'Contact Us', href: '/contact' },
                 { text: 'Privacy Policy', href: '/privacy' },
                 { text: 'Terms of Service', href: '/terms' },
                 { text: 'Refund Policy', href: '/refund' },
               ].map((item) => (
-                <li key={item.href}>
+                <li key={item.text}>
                   <a 
                     href={item.href} 
                     className={`text-sm transition-colors duration-200 ${

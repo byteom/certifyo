@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect, useCallback } from 'react'
+import  { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { subjects } from '@/data/subjects'
 import { useAuthStore } from '@/store/authStore'
@@ -14,9 +14,6 @@ import ExamWarning from '@/components/exam/ExamWarning'
 import ExamResults from '@/components/exam/ExamResults'
 import SubmitConfirmation from '@/components/exam/SubmitConfirmation'
 import LoginWarning from '@/components/exam/LoginWarning'
-
-
-
 
 // Types
 interface ExamQuestion {
@@ -50,8 +47,8 @@ interface _CertificateData {
 
 const MAX_WARNINGS = 3
 
-export default function Page({ params }: { params: { examId: string } }) {
-    const { examId } = params
+export default function Exam({ params }: { params: { examId: string } }) {
+  const { examId } = params
   const router = useRouter()
   const { user } = useAuthStore()
   const isDarkMode = useThemeStore((state) => state.isDarkMode)
@@ -228,7 +225,7 @@ export default function Page({ params }: { params: { examId: string } }) {
     document.addEventListener('copy', handleCopy)
     document.addEventListener('paste', handleCopy)
     document.addEventListener('contextmenu', handleContextMenu)
-    
+
     if (screenfull.isEnabled) {
       screenfull.on('change', handleFullscreenChange)
     }
@@ -249,11 +246,11 @@ export default function Page({ params }: { params: { examId: string } }) {
       document.removeEventListener('copy', handleCopy)
       document.removeEventListener('paste', handleCopy)
       document.removeEventListener('contextmenu', handleContextMenu)
-      
+
       if (screenfull.isEnabled) {
         screenfull.off('change', handleFullscreenChange)
       }
-      
+
       clearInterval(timer)
     }
   }, [exam, examCompleted, enterFullscreen, handleVisibilityChange, handleFullscreenChange, fullscreenError, submitExam])
@@ -362,9 +359,8 @@ export default function Page({ params }: { params: { examId: string } }) {
                 <button
                   onClick={() => setCurrentQuestion((prev) => prev - 1)}
                   disabled={currentQuestion === 0}
-                  className={`px-4 py-2 rounded-md ${
-                    isDarkMode ? 'text-indigo-400 disabled:text-gray-600' : 'text-indigo-600 disabled:text-gray-400'
-                  }`}
+                  className={`px-4 py-2 rounded-md ${isDarkMode ? 'text-indigo-400 disabled:text-gray-600' : 'text-indigo-600 disabled:text-gray-400'
+                    }`}
                 >
                   Previous
                 </button>
@@ -380,11 +376,10 @@ export default function Page({ params }: { params: { examId: string } }) {
                   )}
                   <button
                     onClick={handleSubmitClick}
-                    className={`px-6 py-2 rounded-md ${
-                      answers.length === exam.questions.length
+                    className={`px-6 py-2 rounded-md ${answers.length === exam.questions.length
                         ? 'bg-green-600 hover:bg-green-700 text-white'
                         : 'bg-yellow-600 hover:bg-yellow-700 text-white'
-                    }`}
+                      }`}
                   >
                     {answers.length === exam.questions.length ? (
                       <span className="flex items-center">

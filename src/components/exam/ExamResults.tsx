@@ -1,8 +1,8 @@
-
-import React from 'react';
+"use client"
+// import React from 'react';
 
 import { useThemeStore } from '../../store/themeStore';
-import  { useRouter } from 'next/router';
+import  { useRouter } from 'next/navigation';
 
 
 interface ExamResultsProps {

@@ -1,7 +1,10 @@
-// ✅ app/Exam/[examId]/page.tsx
-import React from 'react'
+// "use client"
+// app/Exam/[examId]/page.tsx
+// import React from 'react'
+
 import ExamClient from '@/components/exam/ExamClient'
 import { Metadata } from 'next'
+
 
 type Props = {
   params: Promise<{ examId: string }>

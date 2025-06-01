@@ -115,7 +115,7 @@ type Props = {
 
 export async function generateMetadata(
   { params }: Props,
-  parent: ResolvingMetadata
+  _parent: ResolvingMetadata // Changed parent to _parent
 ): Promise<Metadata> {
   const slug = params.slug;
   const post = samplePostsDataForSlugPage.find((p) => p.slug === slug);
@@ -140,8 +140,12 @@ export async function generateMetadata(
 
 export default function BlogPostLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: { slug: string };
 }) {
+  // params can be used here if needed, e.g. for context providers
+  // console.log('Blog Post Layout Params:', params);
   return <>{children}</>;
 }

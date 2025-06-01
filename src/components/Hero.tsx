@@ -28,9 +28,9 @@ export default function Hero() {
       <div className="absolute inset-0 overflow-hidden">
 
         {/* Floating dots pattern */}
-        {Array.from({ length: 30 }).map((_, i) => (
+        {Array.from({ length: 30 }).map((_, _i) => ( // Changed i to _i
           <motion.div
-            // key={i}
+            // key={_i} // If key were to use index, it would be _i
             key={crypto.randomUUID()}
             className={`absolute rounded-full ${isDarkMode ? 'bg-indigo-900/30' : 'bg-indigo-100/70'}`}
             style={{

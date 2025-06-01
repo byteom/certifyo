@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import { useThemeStore } from '@/store/themeStore';
 import { BookOpen, Video, Rocket, ArrowRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+// Removed unused useRouter import
 
 export default function LearningPage() {
   const isDarkMode = useThemeStore(state => state.isDarkMode);
-  const router = useRouter();
+  // Removed unused router variable
   const [email, setEmail] = useState('');
 
   const handleJoinWaitlist = (e: React.FormEvent) => {

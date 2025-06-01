@@ -110,14 +110,16 @@ const samplePostsDataForSlugPage: BlogPost[] = [
 ];
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
+  children: React.ReactNode;
 };
 
 export async function generateMetadata(
   { params }: Props,
-  _parent: ResolvingMetadata // Changed parent to _parent
+  _parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const slug = params.slug;
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
   const post = samplePostsDataForSlugPage.find((p) => p.slug === slug);
 
   if (!post) {
@@ -130,22 +132,10 @@ export async function generateMetadata(
   return {
     title: `${post.title} | CertifyO Blog`,
     description: post.description,
-    // openGraph: { // Example for Open Graph data
-    //   title: post.title,
-    //   description: post.description,
-    //   // images: [{ url: post.imageUrl || '/default-og-image.png' }],
-    // },
   };
 }
 
-export default function BlogPostLayout({
-  children,
-  _params, // Prefixed with underscore
-}: {
-  children: React.ReactNode;
-  _params: any; // Changed type to any and prefixed
-}) {
-  // _params can be used here if needed, e.g. for context providers
-  // console.log('Blog Post Layout Params:', _params);
+export default async function BlogPostLayout({ children, params }: Props) {
+  await params; // Ensure params is resolved
   return <>{children}</>;
 }

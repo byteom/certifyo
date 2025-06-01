@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Award, BookOpen, Briefcase, Code, Database, Cloud, Lock, ChevronDown, Star, Zap } from 'lucide-react';
 import { useThemeStore } from "../store/themeStore";
 import Link from 'next/link';
+import { v4 as uuidv4 } from 'uuid';
+
 
 export default function Hero() {
   const { isDarkMode } = useThemeStore();
@@ -31,7 +33,7 @@ export default function Hero() {
         {Array.from({ length: 30 }).map((_, _i) => ( // Changed i to _i
           <motion.div
             // key={_i} // If key were to use index, it would be _i
-            key={crypto.randomUUID()}
+            key={uuidv4()}
             className={`absolute rounded-full ${isDarkMode ? 'bg-indigo-900/30' : 'bg-indigo-100/70'}`}
             style={{
               width: Math.random() * 10 + 5,

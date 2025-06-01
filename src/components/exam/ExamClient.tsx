@@ -1,10 +1,11 @@
 "use client"
-import  { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { subjects } from '@/data/subjects'
 import { useAuthStore } from '@/store/authStore'
 import { useThemeStore } from '@/store/themeStore'
 import { supabase } from '@/lib/supabase'
+import { generateUUID } from '@/lib/utils'
 import screenfull from 'screenfull'
 import { Monitor, CheckCircle, XCircle } from 'lucide-react'
 import ExamHeader from '@/components/exam/ExamHeader'
@@ -107,7 +108,7 @@ export default function Exam({ params }: { params: { examId: string } }) {
 
         if (fetchError) throw fetchError
 
-        const verificationId = existingCert?.verification_id || crypto.randomUUID()
+        const verificationId = existingCert?.verification_id || generateUUID()
         const certificateUrl = `${window.location.origin}/verify/${verificationId}`
 
         if (existingCert) {

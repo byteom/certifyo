@@ -30,9 +30,15 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-share": "^5.2.2",
+    "rehype-prism-plus": "^2.0.1",
+    "rehype-stringify": "^10.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
     "screenfull": "^6.0.2",
     "tailwind-merge": "^3.3.0",
     "three": "^0.176.0",
+    "uuid": "^11.1.0",
     "zustand": "^5.0.4"
   },
   "devDependencies": {

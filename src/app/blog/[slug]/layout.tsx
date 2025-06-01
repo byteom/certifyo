@@ -140,12 +140,12 @@ export async function generateMetadata(
 
 export default function BlogPostLayout({
   children,
-  params,
+  _params, // Prefixed with underscore
 }: {
   children: React.ReactNode;
-  params: { slug: string };
+  _params: any; // Changed type to any and prefixed
 }) {
-  // params can be used here if needed, e.g. for context providers
-  // console.log('Blog Post Layout Params:', params);
+  // _params can be used here if needed, e.g. for context providers
+  // console.log('Blog Post Layout Params:', _params);
   return <>{children}</>;
 }

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   User, Award, BookOpen, Sun, Moon, Menu, X as XIcon, LogOut,
-  Settings, AlignCenterVertical as Certificate,   Video, Trophy
+  Settings, AlignCenterVertical as Certificate,   Video, Trophy, Newspaper
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
@@ -111,6 +111,18 @@ export default function Navigation() {
               >
                 <Video className="h-5 w-5" />
                 <span className="text-sm lg:text-base font-medium">Learning</span>
+              </Link>
+
+              <Link
+                href="/blog"
+                className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md ${
+                  isDarkMode
+                    ? 'hover:bg-gray-800 hover:text-indigo-400'
+                    : 'hover:bg-gray-50 hover:text-indigo-600'
+                }`}
+              >
+                <Newspaper className="h-5 w-5" />
+                <span className="text-sm lg:text-base font-medium">Blog</span>
               </Link>
 
               <div className="relative" ref={eventDropdownRef}>
@@ -322,6 +334,17 @@ export default function Navigation() {
               >
                 <Video className="h-5 w-5 mr-3" />
                 <span className="font-medium">Learning</span>
+              </Link>
+
+              <Link
+                href="/blog"
+                className={`flex items-center py-3 px-4 rounded-md transition-all duration-200 ${
+                  isDarkMode ? 'hover:bg-gray-800 text-gray-100' : 'hover:bg-gray-50 text-gray-900'
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Newspaper className="h-5 w-5 mr-3" />
+                <span className="font-medium">Blog</span>
               </Link>
               
               <div className="relative">

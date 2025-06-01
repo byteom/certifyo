@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react'; // Added useState, useEffect
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import type { Metadata, ResolvingMetadata } from 'next';
-import Link from 'next/link'; // Added Link for breadcrumbs/back button
-import { ArrowLeft, CalendarDays, Tag } from 'lucide-react'; // Icons
+// Removed Metadata imports, as generateMetadata is being moved
+import Link from 'next/link';
+import { ArrowLeft, CalendarDays, Tag } from 'lucide-react';
 
 interface BlogPost {
   title: string;
@@ -12,10 +12,12 @@ interface BlogPost {
   slug: string;
   category?: string;
   content: string;
-  date?: string; // Optional date field
+  date?: string;
 }
 
-const samplePostsDataForSlugPage: BlogPost[] = [
+// This data is now for the page component's rendering purposes only.
+// Metadata generation will use its own data source in the layout.tsx.
+const postDisplayData: BlogPost[] = [
   {
     title: 'My First Blog Post',
     description: 'This is the description for my first blog post about web development.',
@@ -132,37 +134,14 @@ const samplePostsDataForSlugPage: BlogPost[] = [
   }
 ];
 
-type Props = {
-  params: { slug: string };
-};
-
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  const slug = params.slug;
-  const post = samplePostsDataForSlugPage.find((p) => p.slug === slug);
-
-  if (!post) {
-    return {
-      title: 'Post Not Found | CertifyO Blog',
-      description: 'The blog post you are looking for could not be found.',
-    };
-  }
-
-  return {
-    title: `${post.title} | CertifyO Blog`,
-    description: post.description,
-  };
-}
-
+// Removed generateMetadata function and its specific data array.
+// Metadata will be handled by src/app/blog/[slug]/layout.tsx.
 
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params?.slug as string;
-  const [isDarkMode, setIsDarkMode] = useState(false); // Basic dark mode state
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Simulate theme store for styling consistency
    useEffect(() => {
     const matcher = window.matchMedia('(prefers-color-scheme: dark)');
     setIsDarkMode(matcher.matches);
@@ -171,7 +150,8 @@ export default function BlogPostPage() {
     return () => matcher.removeEventListener('change', listener);
   }, []);
 
-  const post = samplePostsDataForSlugPage.find((p) => p.slug === slug);
+  // The page component now uses 'postDisplayData' for its rendering needs.
+  const post = postDisplayData.find((p) => p.slug === slug);
 
   if (!post) {
     return (

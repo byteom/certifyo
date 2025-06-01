@@ -2,14 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import type { Metadata } from 'next';
+// Removed Metadata import as it's no longer used here
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'; // Import card components
 import { ArrowRight } from 'lucide-react'; // For "Read More" link
 
-export const metadata: Metadata = {
-  title: 'Blog | CertifyO',
-  description: 'Read our latest blog posts on technology, travel, food, and more interesting topics from the CertifyO community.',
-};
+// Removed the metadata export block
 
 interface BlogPost {
   title: string;

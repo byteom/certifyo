@@ -2,7 +2,7 @@ import SingleBlogClientComponent from "./BlogClientComponent";
 
 async function getOneBlogPost(slug: string) {
   try {
-    const res = await fetch(`http://localhost:3000/api/blog/${slug}`, {
+    const res = await fetch(`https://certifyo.vercel.app/api/blog/${slug}`, {
       cache: "no-store",
     });
   

@@ -3,7 +3,7 @@ import { BlogPost } from "@/types";
 
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    const res = await fetch("http://localhost:3000/api/blog", {
+    const res = await fetch("https://certifyo.vercel.app/api/blog", {
       cache: "no-store",
     });
 

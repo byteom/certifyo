@@ -24,6 +24,7 @@
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.1",
     "lucide-react": "^0.510.0",
+    "mongoose": "^8.15.1",
     "next": "^15.3.2",
     "next-seo": "^6.6.0",
     "qrcode.react": "^4.2.0",

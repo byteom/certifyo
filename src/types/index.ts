@@ -21,3 +21,12 @@ export interface Subject {
   image: string;
   exams: Exam[];
 }
+
+export interface BlogPost {
+  title: string;
+  description: string;
+  slug: string;
+  category?: string;
+  content: string;
+  createdAt?: string;
+}

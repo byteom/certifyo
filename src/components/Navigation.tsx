@@ -311,7 +311,7 @@ export default function Navigation() {
           <div
             className={`md:hidden font-mono ${isDarkMode ? 'bg-gray-900' : 'bg-white'} border-t ${
               isDarkMode ? 'border-gray-700' : 'border-gray-200'
-            }`}
+            }relative z-30`}
           >
             <div className="px-2 pt-2 pb-4 space-y-1 flex flex-col">
               <Link 

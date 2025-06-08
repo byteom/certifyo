@@ -1,7 +1,7 @@
 "use client";
 
 import { Edit, Trash2 } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 // Removed Metadata imports, as generateMetadata is being moved
 import Link from "next/link";
@@ -146,7 +146,6 @@ export default function SingleBlogClientComponent({
   const router = useRouter();
   const slug = params?.slug as string;
   const [post, setPost] = useState<BlogPost | null>(blog);
-  const [loading, setLoading] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
@@ -194,66 +193,30 @@ export default function SingleBlogClientComponent({
     }
   };
 
-  if (loading) {
+  if (!post) {
     return (
       <div
         className={`min-h-screen flex items-center justify-center ${
           isDarkMode ? "bg-gray-900" : "bg-gray-50"
         }`}
       >
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
-      </div>
-    );
-  }
-
-  if (!post) {
-    return (
-      <div
-        className={`min-h-screen flex items-center justify-center px-4 ${
-          isDarkMode ? "bg-gray-900" : "bg-gray-50"
-        }`}
-      >
-        <div className="text-center py-12">
-          <svg
-            className={`mx-auto h-16 w-16 ${
-              isDarkMode ? "text-red-500" : "text-red-600"
-            }`}
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
-            />
-          </svg>
-          <h1
-            className={`mt-4 text-3xl font-bold tracking-tight ${
-              isDarkMode ? "text-white" : "text-gray-900"
-            } sm:text-4xl`}
-          >
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Post Not Found
           </h1>
-          <p
-            className={`mt-3 text-base ${
-              isDarkMode ? "text-gray-300" : "text-gray-600"
-            }`}
-          >
-            Sorry, we couldn’t find the blog post you’re looking for.
+          <p className="text-gray-500 dark:text-gray-400">
+            Sorry, we couldn&apos;t find the blog post you&apos;re looking for.
           </p>
           <div className="mt-8">
             <Link
               href="/blog"
-              className={`inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+              className={`inline-flex items-center text-sm font-medium ${
                 isDarkMode
-                  ? "border-gray-600 text-indigo-400 hover:bg-gray-700 focus:ring-indigo-500 focus:ring-offset-gray-800"
-                  : "border-gray-300 text-indigo-600 hover:bg-gray-100 focus:ring-indigo-500 focus:ring-offset-white"
-              } transition-all`}
+                  ? "text-indigo-400 hover:text-indigo-300"
+                  : "text-indigo-600 hover:text-indigo-800"
+              } group transition-colors duration-150 ease-in-out`}
             >
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <ArrowLeft className="mr-2 h-4 w-4 transform transition-transform duration-150 ease-in-out group-hover:-translate-x-1" />
               Back to Blog
             </Link>
           </div>

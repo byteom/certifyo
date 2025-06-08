@@ -6,12 +6,22 @@ export async function GET() {
   try {
     await dbConnect();
     const posts = await BlogPost.find()
-      .sort({ date: -1 })
-      .select("title description slug category");
+      .sort({ createdAt: -1 })
+      .select("title description slug category createdAt")
+      .lean();
+
+    if (!posts) {
+      return NextResponse.json(
+        { error: "No blog posts found" },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json(posts);
   } catch (error) {
+    console.error("Error fetching blog posts:", error);
     return NextResponse.json(
-      { error: "Failed to fetch blog posts" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
@@ -19,13 +29,21 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    await dbConnect();
     const body = await request.json();
+    await dbConnect();
 
-    const newPost = new BlogPost(body);
-    await newPost.save();
-    return NextResponse.json(newPost, { status: 201 });
+    const existingPost = await BlogPost.findOne({ slug: body.slug });
+    if (existingPost) {
+      return NextResponse.json(
+        { error: "A post with this slug already exists" },
+        { status: 400 }
+      );
+    }
+
+    const post = await BlogPost.create(body);
+    return NextResponse.json(post, { status: 201 });
   } catch (error) {
+    console.error("Error creating blog post:", error);
     return NextResponse.json(
       { error: "Failed to create blog post" },
       { status: 500 }

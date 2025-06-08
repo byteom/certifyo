@@ -39,6 +39,11 @@ export default function AddBlogModal({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
 
+  const inputBg = isDarkMode ? "bg-gray-700" : "bg-white";
+  const textColor = isDarkMode ? "text-white" : "text-gray-900";
+  const borderColor = isDarkMode ? "border-gray-600" : "border-gray-300";
+  const errorBorder = "border-red-500";
+
   useEffect(() => {
     if (title) {
       const generatedSlug = title
@@ -95,13 +100,6 @@ export default function AddBlogModal({
     return null;
   }
 
-  const modalBg = isDarkMode ? "bg-gray-800" : "bg-white";
-  const textColor = isDarkMode ? "text-gray-100" : "text-gray-900";
-  const borderColor = isDarkMode ? "border-gray-700" : "border-gray-300";
-  const inputBg = isDarkMode ? "bg-gray-700" : "bg-white";
-  const errorBorder = "border-red-500";
-  const buttonHover = isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100";
-
   return (
     <>
       <div
@@ -110,12 +108,12 @@ export default function AddBlogModal({
       />
       <div className="fixed inset-0 flex items-center justify-center  pointer-events-none">
         <div
-          className={`${modalBg} ${textColor} rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto pointer-events-auto border-2 ${borderColor} transform transition-all duration-300 ease-in-out scale-95 opacity-0`}
+          className={`${inputBg} ${textColor} rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto pointer-events-auto border-2 ${borderColor} transform transition-all duration-300 ease-in-out scale-95 opacity-0`}
           style={{ animation: "fadeIn 0.3s ease-in-out forwards" }}
           onClick={(e) => e.stopPropagation()}
         >
           <div
-            className={`flex justify-between items-center p-4 border-b ${borderColor} sticky top-0 ${modalBg} z-10`}
+            className={`flex justify-between items-center p-4 border-b ${borderColor} sticky top-0 ${inputBg} z-10`}
           >
             <h2 className="text-xl font-semibold">
               {isEditMode ? "Edit Blog " : "Add New Blog "}

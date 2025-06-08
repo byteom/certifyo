@@ -13,17 +13,16 @@ async function getOneBlogPost(slug: string) {
     
   } catch (error) {
     console.error("Error fetching blog posts:", error);
-    return [];
+    return null;
   }
 }
 
 export default async function BlogPostPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
   const blog = await getOneBlogPost(slug);
-
   return <SingleBlogClientComponent blog={blog} />;
 }

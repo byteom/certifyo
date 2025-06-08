@@ -42,7 +42,6 @@ export default function BlogClientComponent({
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [posts, setPosts] = useState<BlogPost[]>(blogs);
-  const [loading, setLoading] = useState(false);
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
 
   const handleAddBlog = async (newBlog: BlogPost) => {
@@ -158,7 +157,7 @@ export default function BlogClientComponent({
             <h2 id="filter-heading" className="sr-only">
               Filter Controls
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="space-y-4">
               <div>
                 <label
                   htmlFor="search"
@@ -169,7 +168,7 @@ export default function BlogClientComponent({
                   Search Posts
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Search
                       className={`h-5 w-5 ${
                         isDarkMode ? "text-gray-400" : "text-gray-500"
@@ -182,7 +181,7 @@ export default function BlogClientComponent({
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search by title or description..."
-                    className={`border rounded-lg shadow-sm  ${inputClasses}`}
+                    className={inputClasses}
                   />
                 </div>
               </div>
@@ -195,9 +194,7 @@ export default function BlogClientComponent({
                 >
                   Filter by Category
                 </label>
-                <div
-                  className={`${isDarkMode ? " text-white" : " text-black"}`}
-                >
+                <div className={isDarkMode ? "text-white" : "text-black"}>
                   <DropdownMenu
                     categories={categories}
                     isDarkMode={isDarkMode}
@@ -209,135 +206,125 @@ export default function BlogClientComponent({
             </div>
           </section>
         </motion.div>
-        {loading ? (
-          <div
-            className={`flex items-center justify-center ${
-              isDarkMode ? "bg-gray-900" : "bg-gray-50"
-            }`}
-          >
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
-          </div>
-        ) : (
-          <main>
-            {filteredPosts.length > 0 ? (
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ type: "spring", stiffness: 100 }}
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                  {filteredPosts.map((post, index) => (
-                    <motion.div
-                      key={post.slug}
-                      initial={{ opacity: 0, y: 50 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 + 0.5, type: "spring" }}
-                      whileHover={{
-                        y: -15,
-                        boxShadow: isDarkMode
-                          ? "0 25px 50px -12px rgba(99, 102, 241, 0.25)"
-                          : "0 20px 25px -5px rgba(99, 102, 241, 0.15)",
-                      }}
-                      className={`relative overflow-hidden rounded-2xl ${
-                        isDarkMode ? "bg-gray-800" : "bg-white"
-                      } shadow-lg border-2 ${
+        <main>
+          {filteredPosts.length > 0 ? (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: "spring", stiffness: 100 }}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                {filteredPosts.map((post, index) => (
+                  <motion.div
+                    key={post.slug}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 + 0.5, type: "spring" }}
+                    whileHover={{
+                      y: -15,
+                      boxShadow: isDarkMode
+                        ? "0 25px 50px -12px rgba(99, 102, 241, 0.25)"
+                        : "0 20px 25px -5px rgba(99, 102, 241, 0.15)",
+                    }}
+                    className={`relative overflow-hidden rounded-2xl ${
+                      isDarkMode ? "bg-gray-800" : "bg-white"
+                    } shadow-lg border-2 ${
+                      isDarkMode
+                        ? "border-gray-700 hover:border-indigo-500"
+                        : "border-gray-200 hover:border-indigo-400"
+                    } transition-all duration-300`}
+                  >
+                    <Card
+                      className={`flex flex-col transition-all duration-300 ease-in-out hover:shadow-xl dark:border-gray-700 rounded-xl ${
                         isDarkMode
-                          ? "border-gray-700 hover:border-indigo-500"
-                          : "border-gray-200 hover:border-indigo-400"
-                      } transition-all duration-300`}
+                          ? "bg-gray-800 border-gray-700"
+                          : "bg-white"
+                      }`}
                     >
-                      <Card
-                        className={`flex flex-col transition-all duration-300 ease-in-out  hover:shadow-xl dark:border-gray-700 rounded-xl ${
-                          isDarkMode
-                            ? "bg-gray-800 border-gray-700"
-                            : "bg-white "
-                        }`}
-                      >
-                        <CardHeader>
-                          <CardTitle className="text-lg lg:text-xl">
-                            <Link
-                              href={`/blog/${post.slug}`}
-                              className={`hover:text-indigo-600 dark:hover:text-indigo-400 ${
-                                isDarkMode ? "text-blue-400" : "text-blue-600"
-                              } transition-colors duration-150 ease-in-out`}
-                            >
-                              {post.title}
-                            </Link>
-                          </CardTitle>
-                          {post.category && (
-                            <CardDescription
-                              className={`text-xs pt-1 ${
-                                isDarkMode ? "text-gray-400" : "text-gray-500"
-                              }`}
-                            >
-                              Category: {post.category}
-                            </CardDescription>
-                          )}
-                        </CardHeader>
-                        <CardContent className="flex-grow">
-                          <p
-                            className={`text-sm ${
-                              isDarkMode ? "text-gray-300" : "text-gray-700"
-                            }`}
-                          >
-                            {post.description}
-                          </p>
-                        </CardContent>
-                        <CardFooter>
+                      <CardHeader>
+                        <CardTitle className="text-lg lg:text-xl">
                           <Link
                             href={`/blog/${post.slug}`}
-                            className={`flex items-center text-sm font-medium ${
-                              isDarkMode
-                                ? "text-indigo-400 hover:text-indigo-300"
-                                : "text-indigo-600 hover:text-indigo-800"
-                            } transition-colors duration-150 ease-in-out group`}
+                            className={`hover:text-indigo-600 dark:hover:text-indigo-400 ${
+                              isDarkMode ? "text-blue-400" : "text-blue-600"
+                            } transition-colors duration-150 ease-in-out`}
                           >
-                            Read More
-                            <ArrowRight className="ml-1.5 h-4 w-4 transform transition-transform duration-150 ease-in-out group-hover:translate-x-1" />
+                            {post.title}
                           </Link>
-                        </CardFooter>
-                      </Card>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            ) : (
-              <div className="text-center py-12">
-                <svg
-                  className={`mx-auto h-12 w-12 ${
-                    isDarkMode ? "text-gray-500" : "text-gray-400"
-                  }`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    vectorEffect="non-scaling-stroke"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-                  />
-                </svg>
-                <h3
-                  className={`mt-2 text-lg font-medium ${
-                    isDarkMode ? "text-white" : "text-gray-900"
-                  }`}
-                >
-                  No posts found
-                </h3>
-                <p
-                  className={`mt-1 text-sm ${
-                    isDarkMode ? "text-gray-400" : "text-gray-600"
-                  }`}
-                >
-                  No blog posts matched your current search or filter criteria.
-                </p>
+                        </CardTitle>
+                        {post.category && (
+                          <CardDescription
+                            className={`text-xs pt-1 ${
+                              isDarkMode ? "text-gray-400" : "text-gray-500"
+                            }`}
+                          >
+                            Category: {post.category}
+                          </CardDescription>
+                        )}
+                      </CardHeader>
+                      <CardContent className="flex-grow">
+                        <p
+                          className={`text-sm ${
+                            isDarkMode ? "text-gray-300" : "text-gray-700"
+                          }`}
+                        >
+                          {post.description}
+                        </p>
+                      </CardContent>
+                      <CardFooter>
+                        <Link
+                          href={`/blog/${post.slug}`}
+                          className={`flex items-center text-sm font-medium ${
+                            isDarkMode
+                              ? "text-indigo-400 hover:text-indigo-300"
+                              : "text-indigo-600 hover:text-indigo-800"
+                          } transition-colors duration-150 ease-in-out group`}
+                        >
+                          Read More
+                          <ArrowRight className="ml-1.5 h-4 w-4 transform transition-transform duration-150 ease-in-out group-hover:translate-x-1" />
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                  </motion.div>
+                ))}
               </div>
-            )}
-          </main>
-        )}
+            </motion.div>
+          ) : (
+            <div className="text-center py-12">
+              <svg
+                className={`mx-auto h-12 w-12 ${
+                  isDarkMode ? "text-gray-500" : "text-gray-400"
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  vectorEffect="non-scaling-stroke"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+                />
+              </svg>
+              <h3
+                className={`mt-2 text-lg font-medium ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                No posts found
+              </h3>
+              <p
+                className={`mt-1 text-sm ${
+                  isDarkMode ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
+                No blog posts matched your current search or filter criteria.
+              </p>
+            </div>
+          )}
+        </main>
         <AddBlogModal
           isOpen={showAddModal}
           onClose={() => setShowAddModal(false)}

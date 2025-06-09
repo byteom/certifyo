@@ -1,16 +1,32 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Award, BookOpen, Briefcase, Code, Database, Cloud, Lock, ChevronDown, Star, Zap } from 'lucide-react';
 import { useThemeStore } from "../store/themeStore";
 import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
+import { useState, useEffect } from 'react';
 
 
 export default function Hero() {
   const { isDarkMode } = useThemeStore();
   const MotionLink = motion(Link);
   
+  const [particles, setParticles] = useState<Array<{ id: string; size: number; top: string; left: string; y: number[]; x: number[]; duration: number; delay: number }>>([]);
+
+  useEffect(() => {
+    const generatedParticles = Array.from({ length: 30 }).map(() => ({
+      id: uuidv4(),
+      size: Math.random() * 10 + 5,
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      y: [0, Math.random() * 40 - 20],
+      x: [0, Math.random() * 40 - 20],
+      duration: Math.random() * 10 + 10,
+      delay: Math.random() * 5,
+    }));
+    setParticles(generatedParticles);
+  }, []); // Empty dependency array ensures this runs once on mount
+
   const subjects = [
     { name: 'Web Development', icon: Code, color: 'text-blue-500' },
     { name: 'Data Science', icon: Database, color: 'text-emerald-500' },
@@ -30,24 +46,23 @@ export default function Hero() {
       <div className="absolute inset-0 overflow-hidden">
 
         {/* Floating dots pattern */}
-        {Array.from({ length: 30 }).map((_, _i) => ( // Changed i to _i
+        {particles.map((particle) => (
           <motion.div
-            // key={_i} // If key were to use index, it would be _i
-            key={uuidv4()}
+            key={particle.id}
             className={`absolute rounded-full ${isDarkMode ? 'bg-indigo-900/30' : 'bg-indigo-100/70'}`}
             style={{
-              width: Math.random() * 10 + 5,
-              height: Math.random() * 10 + 5,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
+              width: particle.size,
+              height: particle.size,
+              top: particle.top,
+              left: particle.left,
             }}
             animate={{
-              y: [0, Math.random() * 40 - 20],
-              x: [0, Math.random() * 40 - 20],
+              y: particle.y,
+              x: particle.x,
               opacity: [0.5, 1, 0.5],
             }}
             transition={{
-              duration: Math.random() * 10 + 10,
+              duration: particle.duration,
               repeat: Infinity,
               repeatType: 'reverse',
               ease: 'easeInOut',

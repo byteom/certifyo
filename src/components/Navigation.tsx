@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   User, Award, BookOpen, Sun, Moon, Menu, X as XIcon, LogOut,
-  Settings, AlignCenterVertical as Certificate,   Video, Trophy, Newspaper
+  Settings, AlignCenterVertical as Certificate,   Video, Trophy, Newspaper, Code
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
@@ -113,9 +113,22 @@ export default function Navigation() {
                 <span className="text-sm lg:text-base font-medium">Learning</span>
               </Link>
 
+              {/* New Code Lab Button */}
+              <Link
+                href="/code-editor"
+                className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md ${
+                  isDarkMode 
+                    ? 'hover:bg-gray-800 hover:text-indigo-400' 
+                    : 'hover:bg-gray-50 hover:text-indigo-600'
+                }`}
+              >
+                <Code className="h-5 w-5" />
+                <span className="text-sm lg:text-base font-medium">Code Editor</span>
+              </Link>
+
               <Link
                 href="/blog"
-                className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md ${
+                className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
                   isDarkMode
                     ? 'hover:bg-gray-800 hover:text-indigo-400'
                     : 'hover:bg-gray-50 hover:text-indigo-600'
@@ -128,7 +141,7 @@ export default function Navigation() {
               <div className="relative" ref={eventDropdownRef}>
                 <button
                   onClick={() => setEventDropdownVisible(!eventDropdownVisible)}
-                  className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md ${
+                  className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
                     isDarkMode 
                       ? 'hover:bg-gray-800 hover:text-indigo-400' 
                       : 'hover:bg-gray-50 hover:text-indigo-600'
@@ -148,7 +161,7 @@ export default function Navigation() {
                   >
                     <Link
                       href="/competitions"
-                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 ${
+                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 cursor-pointer ${
                         isDarkMode 
                           ? 'hover:bg-gray-700 text-gray-100' 
                           : 'hover:bg-gray-50 text-gray-900'
@@ -158,7 +171,7 @@ export default function Navigation() {
                     </Link>
                     <Link
                       href="/events"
-                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 ${
+                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 cursor-pointer ${
                         isDarkMode 
                           ? 'hover:bg-gray-700 text-gray-100' 
                           : 'hover:bg-gray-50 text-gray-900'
@@ -172,7 +185,7 @@ export default function Navigation() {
 
               <button
                 onClick={handleVerifyCertificate}
-                className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md ${
+                className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
                   isDarkMode 
                     ? 'hover:bg-gray-800 hover:text-indigo-400' 
                     : 'hover:bg-gray-50 hover:text-indigo-600'
@@ -185,7 +198,7 @@ export default function Navigation() {
               {user && (
                 <Link
                   href="/certificates"
-                  className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md ${
+                  className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
                     isDarkMode 
                       ? 'hover:bg-gray-800 hover:text-indigo-400' 
                       : 'hover:bg-gray-50 hover:text-indigo-600'
@@ -199,7 +212,7 @@ export default function Navigation() {
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className={`p-2 rounded-full transition-all duration-200 ${
+                className={`p-2 rounded-full transition-all duration-200 cursor-pointer ${
                   isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
                 }`}
                 aria-label="Toggle theme"
@@ -269,7 +282,7 @@ export default function Navigation() {
                 <div className="flex space-x-2 ml-2">
                   <button
                     onClick={() => setAuthModal({ isOpen: true, mode: 'signin' })}
-                    className={`px-4 py-2 rounded-md transition-all duration-200 ${
+                    className={`px-4 py-2 rounded-md transition-all duration-200 cursor-pointer ${
                       isDarkMode 
                         ? 'text-indigo-400 hover:bg-gray-800' 
                         : 'text-indigo-600 hover:bg-gray-50'
@@ -279,7 +292,7 @@ export default function Navigation() {
                   </button>
                   <button
                     onClick={() => setAuthModal({ isOpen: true, mode: 'signup' })}
-                    className={`bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-md hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-md ${
+                    className={`bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-md hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-md cursor-pointer ${
                       isDarkMode ? 'shadow-indigo-900/50' : 'shadow-indigo-500/30'
                     }`}
                   >
@@ -334,6 +347,18 @@ export default function Navigation() {
               >
                 <Video className="h-5 w-5 mr-3" />
                 <span className="font-medium">Learning</span>
+              </Link>
+
+              {/* New Code Lab Button for Mobile */}
+              <Link 
+                href="/code-editor" 
+                className={`flex items-center py-3 px-4 rounded-md transition-all duration-200 ${
+                  isDarkMode ? 'hover:bg-gray-800 text-gray-100' : 'hover:bg-gray-50 text-gray-900'
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Code className="h-5 w-5 mr-3" />
+                <span className="font-medium">Code Editor</span>
               </Link>
 
               <Link
@@ -429,86 +454,22 @@ export default function Navigation() {
                     className={`flex items-center py-3 px-4 rounded-md transition-all duration-200 ${
                       isDarkMode ? 'hover:bg-gray-800 text-gray-100' : 'hover:bg-gray-50 text-gray-900'
                     }`}
-                    onClick={() => setMobileMenuOpen(false)}
                   >
-                    <User className="h-5 w-5 mr-3" />
-                    <span className="font-medium">Profile</span>
+                    Profile
                   </Link>
-                  
-                  <button
-                    onClick={() => {
-                      signOut();
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`flex items-center py-3 px-4 rounded-md transition-all duration-200 ${
-                      isDarkMode ? 'hover:bg-gray-800 text-gray-100' : 'hover:bg-gray-50 text-gray-900'
-                    }`}
-                  >
-                    <LogOut className="h-5 w-5 mr-3" />
-                    <span className="font-medium">Sign Out</span>
-                  </button>
                 </>
-              )}
-
-              {/* Theme Toggle for mobile */}
-              <button
-                onClick={toggleTheme}
-                className={`flex items-center py-3 px-4 rounded-md transition-all duration-200 ${
-                  isDarkMode ? 'hover:bg-gray-800 text-gray-100' : 'hover:bg-gray-50 text-gray-900'
-                }`}
-              >
-                {isDarkMode ? (
-                  <>
-                    <Sun className="h-5 w-5 mr-3 text-yellow-300" />
-                    <span className="font-medium">Light Mode</span>
-                  </>
-                ) : (
-                  <>
-                    <Moon className="h-5 w-5 mr-3 text-indigo-600" />
-                    <span className="font-medium">Dark Mode</span>
-                  </>
-                )}
-              </button>
-
-              {/* Sign In / Sign Up for mobile */}
-              {!user && (
-                <div className="mt-2 flex flex-col space-y-2 pt-2 border-t border-gray-200 dark:border-gray-700 px-2">
-                  <button
-                    onClick={() => {
-                      setAuthModal({ isOpen: true, mode: 'signin' });
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`w-full py-2 px-4 rounded-md transition-all duration-200 font-medium ${
-                      isDarkMode 
-                        ? 'text-indigo-400 hover:bg-gray-800' 
-                        : 'text-indigo-600 hover:bg-gray-50'
-                    }`}
-                  >
-                    Sign In
-                  </button>
-                  <button
-                    onClick={() => {
-                      setAuthModal({ isOpen: true, mode: 'signup' });
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-md hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-md ${
-                      isDarkMode ? 'shadow-indigo-900/50' : 'shadow-indigo-500/30'
-                    }`}
-                  >
-                    Sign Up
-                  </button>
-                </div>
               )}
             </div>
           </div>
         )}
       </nav>
 
+      {/* Render AuthModal */}
       <AuthModal
         isOpen={authModal.isOpen}
-        mode={authModal.mode}
         onClose={() => setAuthModal({ ...authModal, isOpen: false })}
-        onModeChange={(mode) => setAuthModal({ ...authModal, mode })}
+        mode={authModal.mode}
+        onModeChange={(newMode) => setAuthModal({ ...authModal, mode: newMode })}
       />
     </>
   );

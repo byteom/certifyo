@@ -187,7 +187,9 @@ function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className={`py-16 md:py-24 ${isDarkMode ? 'bg-indigo-900/30' : 'bg-indigo-50'}`}>
+      <section className={`py-16 md:py-24 ${
+        isDarkMode ? 'bg-indigo-900/30' : 'bg-indigo-50'
+      }`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

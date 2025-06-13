@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useThemeStore } from '@/store/themeStore';
 import { useAuthStore } from '@/store/authStore';
 import { supabase } from '@/lib/supabase';
@@ -19,13 +19,13 @@ interface AIGeneratedQuestion {
 
 export default function CustomQuizPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const isDarkMode = useThemeStore(state => state.isDarkMode);
   const { user } = useAuthStore();
   
-  const topic = searchParams.get('topic') || '';
-  const difficulty = searchParams.get('difficulty') || 'medium';
-  const count = parseInt(searchParams.get('count') || '10', 10);
+  // Instead of using useSearchParams, we'll use URL parsing
+  const [topic, setTopic] = useState('');
+  const [difficulty, setDifficulty] = useState('medium');
+  const [count, setCount] = useState(10);
   
   const [questions, setQuestions] = useState<AIGeneratedQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -40,52 +40,64 @@ export default function CustomQuizPage() {
       return;
     }
 
-    if (!topic) {
-      router.push('/quiz');
-      return;
-    }
-
-    const fetchApiKeyAndGenerateQuestions = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('groq_api_key')
-          .eq('id', user.id)
-          .single();
-
-        if (error) throw error;
-        
-        if (!data?.groq_api_key) {
-          setError('No API key found. Please add your Groq API key in your profile settings.');
-          setIsLoading(false);
-          return;
-        }
-        
-        // Generate questions
-        try {
-          const generatedQuestions = await generateCustomQuizQuestions(
-            data.groq_api_key,
-            topic,
-            difficulty,
-            count
-          );
-          
-          setQuestions(generatedQuestions);
-          setIsLoading(false);
-        } catch (err) {
-          console.error('Error generating questions:', err);
-          setError('Failed to generate quiz questions. Please try again.');
-          setIsLoading(false);
-        }
-      } catch (err) {
-        console.error('Error fetching API key:', err);
-        setError('Failed to fetch API key. Please try again.');
-        setIsLoading(false);
+    // Parse URL parameters manually instead of using useSearchParams
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const topicParam = urlParams.get('topic');
+      const difficultyParam = urlParams.get('difficulty');
+      const countParam = urlParams.get('count');
+      
+      if (topicParam) setTopic(topicParam);
+      if (difficultyParam) setDifficulty(difficultyParam);
+      if (countParam) setCount(parseInt(countParam, 10));
+      
+      if (!topicParam) {
+        router.push('/quiz');
+        return;
       }
-    };
+      
+      const fetchApiKeyAndGenerateQuestions = async () => {
+        try {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('groq_api_key')
+            .eq('id', user.id)
+            .single();
 
-    fetchApiKeyAndGenerateQuestions();
-  }, [user, router, topic, difficulty, count]);
+          if (error) throw error;
+          
+          if (!data?.groq_api_key) {
+            setError('No API key found. Please add your Groq API key in your profile settings.');
+            setIsLoading(false);
+            return;
+          }
+          
+          // Generate questions
+          try {
+            const generatedQuestions = await generateCustomQuizQuestions(
+              data.groq_api_key,
+              topicParam,
+              difficultyParam || 'medium',
+              countParam ? parseInt(countParam, 10) : 10
+            );
+            
+            setQuestions(generatedQuestions);
+            setIsLoading(false);
+          } catch (err) {
+            console.error('Error generating questions:', err);
+            setError('Failed to generate quiz questions. Please try again.');
+            setIsLoading(false);
+          }
+        } catch (err) {
+          console.error('Error fetching API key:', err);
+          setError('Failed to fetch API key. Please try again.');
+          setIsLoading(false);
+        }
+      };
+
+      fetchApiKeyAndGenerateQuestions();
+    }
+  }, [user, router]);
 
   const handleAnswerSelect = (answerIndex: number) => {
     const newAnswers = [...selectedAnswers];

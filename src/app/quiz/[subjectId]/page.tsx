@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useThemeStore } from '@/store/themeStore';
 import { useAuthStore } from '@/store/authStore';
@@ -18,12 +18,15 @@ interface AIGeneratedQuestion {
   correctAnswer: number;
 }
 
-export default function SubjectQuizPage({ params }: { params: { subjectId: string } }) {
+export default function SubjectQuizPage({ params }: { params: Promise<{ subjectId: string }> }) {
   const router = useRouter();
   const isDarkMode = useThemeStore(state => state.isDarkMode);
   const { user } = useAuthStore();
   
-  const [subject, setSubject] = useState(subjects.find(s => s.id.toString() === params.subjectId));
+  // Unwrap params using React.use()
+  const { subjectId } = use(params);
+  
+  const [subject, setSubject] = useState(subjects.find(s => s.id.toString() === subjectId));
   const [questions, setQuestions] = useState<AIGeneratedQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
@@ -84,7 +87,7 @@ export default function SubjectQuizPage({ params }: { params: { subjectId: strin
     };
 
     fetchApiKey();
-  }, [user, router, subject, params.subjectId]);
+  }, [user, router, subject, subjectId]);
 
   const handleAnswerSelect = (answerIndex: number) => {
     const newAnswers = [...selectedAnswers];

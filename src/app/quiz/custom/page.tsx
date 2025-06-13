@@ -121,6 +121,30 @@ export default function CustomQuizPage() {
 
   const handleSubmitQuiz = () => {
     setQuizCompleted(true);
+    
+    // Optional: Save quiz results to database
+    if (user && topic) {
+      try {
+        const score = selectedAnswers.filter(
+          (answer, index) => answer === questions[index].correctAnswer
+        ).length;
+        
+        const percentage = Math.round((score / questions.length) * 100);
+        
+        supabase.from('quiz_history').insert([{
+          user_id: user.id,
+          subject: topic,
+          score: percentage,
+          total_questions: questions.length,
+          is_custom: true,
+          difficulty: difficulty
+        }]).then(({ error }) => {
+          if (error) console.error('Error saving quiz results:', error);
+        });
+      } catch (err) {
+        console.error('Error processing quiz results:', err);
+      }
+    }
   };
 
   const handleReturnToQuizzes = () => {

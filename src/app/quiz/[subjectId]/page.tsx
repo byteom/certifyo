@@ -111,6 +111,29 @@ export default function SubjectQuizPage({ params }: { params: Promise<{ subjectI
 
   const handleSubmitQuiz = () => {
     setQuizCompleted(true);
+    
+    // Optional: Save quiz results to database
+    if (user && subject) {
+      try {
+        const score = selectedAnswers.filter(
+          (answer, index) => answer === questions[index].correctAnswer
+        ).length;
+        
+        const percentage = Math.round((score / questions.length) * 100);
+        
+        supabase.from('quiz_history').insert([{
+          user_id: user.id,
+          subject: subject.name,
+          score: percentage,
+          total_questions: questions.length,
+          is_custom: false
+        }]).then(({ error }) => {
+          if (error) console.error('Error saving quiz results:', error);
+        });
+      } catch (err) {
+        console.error('Error processing quiz results:', err);
+      }
+    }
   };
 
   const handleReturnToQuizzes = () => {
@@ -184,6 +207,7 @@ export default function SubjectQuizPage({ params }: { params: Promise<{ subjectI
       <QuizResults
         correctAnswers={correctAnswers}
         totalQuestions={questions.length}
+        passingScore={70}
         onReturnToQuizzes={handleReturnToQuizzes}
         isDarkMode={isDarkMode}
         subject={subject.name}

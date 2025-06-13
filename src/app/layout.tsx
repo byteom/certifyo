@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "CertifyO - Professional Certifications",
   description: "Earn industry-recognized certificates and advance your career with CertifyO",
   icons: {
-    icon: '/logo.png', // Using the existing logo as favicon
+    icon: '/favicon.ico',
   },
 };
 

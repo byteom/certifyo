@@ -4,15 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   User, Award, BookOpen, Sun, Moon, Menu, X as XIcon, LogOut,
-  Settings, AlignCenterVertical as Certificate,   Video, Trophy, Newspaper, Code, ChevronDown,
-  Laptop
+  Settings, AlignCenterVertical as Certificate, Video, Trophy, Newspaper, Code, ChevronDown,
+  Laptop, Brain
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
 import AuthModal from './AuthModal';
 import { useRouter, usePathname } from 'next/navigation';
-
-
 
 export default function Navigation() {
   const [authModal, setAuthModal] = useState<{ isOpen: boolean; mode: 'signin' | 'signup' }>({
@@ -85,13 +83,12 @@ export default function Navigation() {
             <div className="flex items-center">
               <Link href="/" className="flex items-center">
                 <Image
-            src="/logo.png" // ✅ Correct way to use public assets
-            alt="logo"
-          width={32}
-            height={32}
-          className={`h-8 w-8 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}
-            />
-
+                  src="/logo.png"
+                  alt="logo"
+                  width={32}
+                  height={32}
+                  className={`h-8 w-8 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}
+                />
                 <span className="ml-2 text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent tracking-tighter">
                   CertifyO
                 </span>
@@ -149,6 +146,18 @@ export default function Navigation() {
                     >
                       <Code className="h-4 w-4 mr-2" />
                       DSA
+                    </Link>
+                    <Link
+                      href="/quiz"
+                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 cursor-pointer ${
+                        isDarkMode
+                          ? 'hover:bg-gray-700 text-gray-100'
+                          : 'hover:bg-gray-50 text-gray-900'
+                      }`}
+                      onClick={() => setPracticeDropdownVisible(false)}
+                    >
+                      <Brain className="h-4 w-4 mr-2" />
+                      AI Quiz
                     </Link>
                   </div>
                 )}
@@ -362,6 +371,18 @@ export default function Navigation() {
                         <Settings className="h-4 w-4 mr-2" />
                         Profile
                       </button>
+                      <Link
+                        href="/quiz"
+                        className={`flex items-center w-full px-4 py-2 text-sm transition-all duration-200 ${
+                          isDarkMode
+                            ? 'hover:bg-gray-700 text-gray-100'
+                            : 'hover:bg-gray-50 text-gray-900'
+                        }`}
+                        onClick={() => setProfileDropdownVisible(false)}
+                      >
+                        <Brain className="h-4 w-4 mr-2" />
+                        AI Quiz
+                      </Link>
                       <button
                         onClick={() => {
                           signOut();
@@ -474,6 +495,21 @@ export default function Navigation() {
                       }}
                     >
                       DSA
+                    </Link>
+                    <Link
+                      href="/quiz"
+                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 ${
+                        isDarkMode 
+                          ? 'hover:bg-gray-700 text-gray-100' 
+                          : 'hover:bg-gray-100 text-gray-900'
+                      }`}
+                      onClick={() => {
+                        setPracticeDropdownVisible(false);
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      <Brain className="h-4 w-4 mr-2" />
+                      AI Quiz
                     </Link>
                   </div>
                 )}

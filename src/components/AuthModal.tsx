@@ -121,7 +121,7 @@ export default function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthM
   if (!isOpen) return null;
 
   return (
-    <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${isDarkMode ? 'dark' : ''}`}>
+    <div className={`fixed inset-0 flex items-center justify-center z-50 backdrop-filter backdrop-blur-sm`} style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
       <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-lg p-8 max-w-md w-full relative transform transition-all duration-300 ease-in-out`}>
         {/* Header with theme toggle and close button */}
         <div className="absolute top-4 right-4 flex items-center space-x-2">

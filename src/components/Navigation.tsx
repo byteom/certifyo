@@ -4,7 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   User, Award, BookOpen, Sun, Moon, Menu, X as XIcon, LogOut,
-  Settings, AlignCenterVertical as Certificate,   Video, Trophy, Newspaper, Code
+  Settings, AlignCenterVertical as Certificate,   Video, Trophy, Newspaper, Code, ChevronDown,
+  Laptop
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
@@ -21,6 +22,8 @@ export default function Navigation() {
   const [eventDropdownVisible, setEventDropdownVisible] = useState(false);
   const [profileDropdownVisible, setProfileDropdownVisible] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [solutionsDropdownVisible, setSolutionsDropdownVisible] = useState(false);
+  const [practiceDropdownVisible, setPracticeDropdownVisible] = useState(false);
   const { user, signOut } = useAuthStore();
   const { isDarkMode, toggleTheme } = useThemeStore();
   const router = useRouter();
@@ -29,6 +32,8 @@ export default function Navigation() {
   // Refs for dropdowns
   const eventDropdownRef = useRef<HTMLDivElement>(null);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
+  const solutionsDropdownRef = useRef<HTMLDivElement>(null);
+  const practiceDropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -38,6 +43,12 @@ export default function Navigation() {
       }
       if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
         setProfileDropdownVisible(false);
+      }
+      if (solutionsDropdownRef.current && !solutionsDropdownRef.current.contains(event.target as Node)) {
+        setSolutionsDropdownVisible(false);
+      }
+      if (practiceDropdownRef.current && !practiceDropdownRef.current.contains(event.target as Node)) {
+        setPracticeDropdownVisible(false);
       }
     };
 
@@ -89,42 +100,139 @@ export default function Navigation() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
-              <Link
-                href="/subjects"
-                className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md ${
-                  isDarkMode 
-                    ? 'hover:bg-gray-800 hover:text-indigo-400' 
-                    : 'hover:bg-gray-50 hover:text-indigo-600'
-                }`}
+              {/* Practice Dropdown */}
+              <div className="relative" ref={practiceDropdownRef}
+                onMouseEnter={() => setPracticeDropdownVisible(true)}
+                onMouseLeave={() => setPracticeDropdownVisible(false)}
               >
-                <BookOpen className="h-5 w-5" />
-                <span className="text-sm lg:text-base font-medium">Subjects</span>
-              </Link>
+                <button
+                  onClick={() => setPracticeDropdownVisible(!practiceDropdownVisible)}
+                  className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
+                    isDarkMode
+                      ? 'hover:bg-gray-800 hover:text-indigo-400'
+                      : 'hover:bg-gray-50 hover:text-indigo-600'
+                  }`}
+                >
+                  <Laptop className="h-5 w-5" />
+                  <span className="text-sm lg:text-sm font-medium">Practice</span>
+                  <ChevronDown className="h-4 w-4 ml-1" />
+                </button>
+                {practiceDropdownVisible && (
+                  <div
+                    className={`absolute left-0 w-48 mt-1 py-1 rounded-md shadow-xl z-50 border ${
+                      isDarkMode
+                        ? 'bg-gray-800 border-gray-700'
+                        : 'bg-white border-gray-200'
+                    }`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Link
+                      href="/practice/web-dev"
+                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 cursor-pointer ${
+                        isDarkMode
+                          ? 'hover:bg-gray-700 text-gray-100'
+                          : 'hover:bg-gray-50 text-gray-900'
+                      }`}
+                      onClick={() => setPracticeDropdownVisible(false)}
+                    >
+                      <Code className="h-4 w-4 mr-2" />
+                      Web Dev
+                    </Link>
+                    <Link
+                      href="/practice/dsa"
+                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 cursor-pointer ${
+                        isDarkMode
+                          ? 'hover:bg-gray-700 text-gray-100'
+                          : 'hover:bg-gray-50 text-gray-900'
+                      }`}
+                      onClick={() => setPracticeDropdownVisible(false)}
+                    >
+                      <Code className="h-4 w-4 mr-2" />
+                      DSA
+                    </Link>
+                  </div>
+                )}
+              </div>
 
-              <Link
-                href="/learning"
-                className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md ${
-                  isDarkMode 
-                    ? 'hover:bg-gray-800 hover:text-indigo-400' 
-                    : 'hover:bg-gray-50 hover:text-indigo-600'
-                }`}
+              {/* Solutions Dropdown */}
+              <div className="relative" ref={solutionsDropdownRef}
+                onMouseEnter={() => setSolutionsDropdownVisible(true)}
+                onMouseLeave={() => setSolutionsDropdownVisible(false)}
               >
-                <Video className="h-5 w-5" />
-                <span className="text-sm lg:text-base font-medium">Learning</span>
-              </Link>
-
-              {/* New Code Lab Button */}
-              <Link
-                href="/code-editor"
-                className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md ${
-                  isDarkMode 
-                    ? 'hover:bg-gray-800 hover:text-indigo-400' 
-                    : 'hover:bg-gray-50 hover:text-indigo-600'
-                }`}
-              >
-                <Code className="h-5 w-5" />
-                <span className="text-sm lg:text-base font-medium">Code Editor</span>
-              </Link>
+                <button
+                  onClick={() => setSolutionsDropdownVisible(!solutionsDropdownVisible)}
+                  className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
+                    isDarkMode
+                      ? 'hover:bg-gray-800 hover:text-indigo-400'
+                      : 'hover:bg-gray-50 hover:text-indigo-600'
+                  }`}
+                >
+                  <BookOpen className="h-5 w-5" />
+                  <span className="text-sm lg:text-sm font-medium">Resources</span>
+                  <ChevronDown className="h-4 w-4 ml-1" />
+                </button>
+                {solutionsDropdownVisible && (
+                  <div
+                    className={`absolute left-0 w-48 mt-1 py-1 rounded-md shadow-xl z-50 border ${
+                      isDarkMode
+                        ? 'bg-gray-800 border-gray-700'
+                        : 'bg-white border-gray-200'
+                    }`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Link
+                      href="/subjects"
+                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 cursor-pointer ${
+                        isDarkMode
+                          ? 'hover:bg-gray-700 text-gray-100'
+                          : 'hover:bg-gray-50 text-gray-900'
+                      }`}
+                      onClick={() => setSolutionsDropdownVisible(false)}
+                    >
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      Subjects
+                    </Link>
+                    <Link
+                      href="/learning"
+                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 cursor-pointer ${
+                        isDarkMode
+                          ? 'hover:bg-gray-700 text-gray-100'
+                          : 'hover:bg-gray-50 text-gray-900'
+                      }`}
+                      onClick={() => setSolutionsDropdownVisible(false)}
+                    >
+                      <Video className="h-4 w-4 mr-2" />
+                      Learning
+                    </Link>
+                    <Link
+                      href="/code-editor"
+                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 cursor-pointer ${
+                        isDarkMode
+                          ? 'hover:bg-gray-700 text-gray-100'
+                          : 'hover:bg-gray-50 text-gray-900'
+                      }`}
+                      onClick={() => setSolutionsDropdownVisible(false)}
+                    >
+                      <Code className="h-4 w-4 mr-2" />
+                      Code Editor
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleVerifyCertificate();
+                        setSolutionsDropdownVisible(false);
+                      }}
+                      className={`flex items-center w-full px-4 py-2 text-sm transition-all duration-200 cursor-pointer ${
+                        isDarkMode
+                          ? 'hover:bg-gray-700 text-gray-100'
+                          : 'hover:bg-gray-50 text-gray-900'
+                      }`}
+                    >
+                      <Certificate className="h-4 w-4 mr-2" />
+                      Verify
+                    </button>
+                  </div>
+                )}
+              </div>
 
               <Link
                 href="/blog"
@@ -135,26 +243,29 @@ export default function Navigation() {
                 }`}
               >
                 <Newspaper className="h-5 w-5" />
-                <span className="text-sm lg:text-base font-medium">Blog</span>
+                <span className="text-sm lg:text-sm font-medium">Blog</span>
               </Link>
 
-              <div className="relative" ref={eventDropdownRef}>
+              <div className="relative" ref={eventDropdownRef}
+                onMouseEnter={() => setEventDropdownVisible(true)}
+                onMouseLeave={() => setEventDropdownVisible(false)}
+              >
                 <button
                   onClick={() => setEventDropdownVisible(!eventDropdownVisible)}
                   className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
-                    isDarkMode 
-                      ? 'hover:bg-gray-800 hover:text-indigo-400' 
+                    isDarkMode
+                      ? 'hover:bg-gray-800 hover:text-indigo-400'
                       : 'hover:bg-gray-50 hover:text-indigo-600'
                   }`}
                 >
                   <Trophy className="h-5 w-5" />
-                  <span className="text-sm lg:text-base font-medium">Events</span>
+                  <span className="text-sm lg:text-sm font-medium">Events</span>
                 </button>
                 {eventDropdownVisible && (
-                  <div 
-                    className={`absolute right-0 w-48 mt-1 py-1 rounded-md shadow-xl z-50 border ${
-                      isDarkMode 
-                        ? 'bg-gray-800 border-gray-700' 
+                  <div
+                    className={`absolute left-0 w-48 mt-1 py-1 rounded-md shadow-xl z-50 border ${
+                      isDarkMode
+                        ? 'bg-gray-800 border-gray-700'
                         : 'bg-white border-gray-200'
                     }`}
                     onClick={(e) => e.stopPropagation()}
@@ -162,20 +273,22 @@ export default function Navigation() {
                     <Link
                       href="/competitions"
                       className={`flex items-center px-4 py-2 text-sm transition-all duration-200 cursor-pointer ${
-                        isDarkMode 
-                          ? 'hover:bg-gray-700 text-gray-100' 
-                          : 'hover:bg-gray-50 text-gray-900'
+                        isDarkMode
+                          ? 'hover:bg-gray-700 text-gray-100'
+                          : 'hover:bg-gray-100 text-gray-900'
                       }`}
+                      onClick={() => setEventDropdownVisible(false)}
                     >
                       Competitions
                     </Link>
                     <Link
                       href="/events"
                       className={`flex items-center px-4 py-2 text-sm transition-all duration-200 cursor-pointer ${
-                        isDarkMode 
-                          ? 'hover:bg-gray-700 text-gray-100' 
-                          : 'hover:bg-gray-50 text-gray-900'
+                        isDarkMode
+                          ? 'hover:bg-gray-700 text-gray-100'
+                          : 'hover:bg-gray-100 text-gray-900'
                       }`}
+                      onClick={() => setEventDropdownVisible(false)}
                     >
                       Events
                     </Link>
@@ -183,29 +296,17 @@ export default function Navigation() {
                 )}
               </div>
 
-              <button
-                onClick={handleVerifyCertificate}
-                className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
-                  isDarkMode 
-                    ? 'hover:bg-gray-800 hover:text-indigo-400' 
-                    : 'hover:bg-gray-50 hover:text-indigo-600'
-                }`}
-              >
-                <Certificate className="h-5 w-5" />
-                <span className="text-sm lg:text-base font-medium">Verify</span>
-              </button>
-
               {user && (
                 <Link
                   href="/certificates"
                   className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
-                    isDarkMode 
-                      ? 'hover:bg-gray-800 hover:text-indigo-400' 
+                    isDarkMode
+                      ? 'hover:bg-gray-800 hover:text-indigo-400'
                       : 'hover:bg-gray-50 hover:text-indigo-600'
                   }`}
                 >
                   <Award className="h-5 w-5" />
-                  <span className="text-sm lg:text-base font-medium">My Certificates</span>
+                  <span className="text-sm lg:text-sm font-medium">My Certificates</span>
                 </Link>
               )}
 
@@ -229,23 +330,23 @@ export default function Navigation() {
                 <div className="relative" ref={profileDropdownRef}>
                   <button
                     className={`flex items-center space-x-2 transition-all duration-200 px-3 py-2 rounded-md ${
-                      isDarkMode 
-                        ? 'hover:bg-gray-800 hover:text-indigo-400' 
+                      isDarkMode
+                        ? 'hover:bg-gray-800 hover:text-indigo-400'
                         : 'hover:bg-gray-50 hover:text-indigo-600'
                     }`}
                     onClick={() => setProfileDropdownVisible(!profileDropdownVisible)}
                     aria-label="User menu"
                   >
                     <User className="h-5 w-5" />
-                    <span className="text-sm lg:text-base font-medium">
+                    <span className="text-sm lg:text-sm font-medium">
                       {user?.email ? user.email.split('@')[0].slice(0, 6) : 'Sign In'}
                     </span>
                   </button>
                   {profileDropdownVisible && (
                     <div
                       className={`absolute right-0 w-48 mt-1 py-1 rounded-md shadow-xl z-50 border ${
-                        isDarkMode 
-                          ? 'bg-gray-800 border-gray-700' 
+                        isDarkMode
+                          ? 'bg-gray-800 border-gray-700'
                           : 'bg-white border-gray-200'
                       }`}
                       onClick={(e) => e.stopPropagation()}
@@ -253,8 +354,8 @@ export default function Navigation() {
                       <button
                         onClick={handleProfileClick}
                         className={`flex items-center w-full px-4 py-2 text-sm transition-all duration-200 ${
-                          isDarkMode 
-                            ? 'hover:bg-gray-700 text-gray-100' 
+                          isDarkMode
+                            ? 'hover:bg-gray-700 text-gray-100'
                             : 'hover:bg-gray-50 text-gray-900'
                         }`}
                       >
@@ -267,8 +368,8 @@ export default function Navigation() {
                           setProfileDropdownVisible(false);
                         }}
                         className={`flex items-center w-full px-4 py-2 text-sm transition-all duration-200 ${
-                          isDarkMode 
-                            ? 'hover:bg-gray-700 text-gray-100' 
+                          isDarkMode
+                            ? 'hover:bg-gray-700 text-gray-100'
                             : 'hover:bg-gray-50 text-gray-900'
                         }`}
                       >
@@ -283,8 +384,8 @@ export default function Navigation() {
                   <button
                     onClick={() => setAuthModal({ isOpen: true, mode: 'signin' })}
                     className={`px-4 py-2 rounded-md transition-all duration-200 cursor-pointer ${
-                      isDarkMode 
-                        ? 'text-indigo-400 hover:bg-gray-800' 
+                      isDarkMode
+                        ? 'text-indigo-400 hover:bg-gray-800'
                         : 'text-indigo-600 hover:bg-gray-50'
                     } font-medium`}
                   >
@@ -327,6 +428,57 @@ export default function Navigation() {
             }relative z-30`}
           >
             <div className="px-2 pt-2 pb-4 space-y-1 flex flex-col">
+              {/* Add Practice section to mobile menu */}
+              <div className="relative">
+                <button
+                  onClick={() => setPracticeDropdownVisible(!practiceDropdownVisible)}
+                  className={`flex items-center py-3 px-4 rounded-md transition-all duration-200 ${
+                    isDarkMode ? 'hover:bg-gray-800 text-gray-100' : 'hover:bg-gray-50 text-gray-900'
+                  }`}
+                >
+                  <Laptop className="h-5 w-5 mr-3" />
+                  <span className="font-medium">Practice</span>
+                </button>
+                {practiceDropdownVisible && (
+                  <div className={`ml-8 mt-1 py-1 rounded-md ${
+                    isDarkMode 
+                      ? 'bg-gray-800' 
+                      : 'bg-gray-50'
+                  }`}
+                  onClick={(e) => e.stopPropagation()}
+                  >
+                    <Link
+                      href="/practice/web-dev"
+                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 ${
+                        isDarkMode 
+                          ? 'hover:bg-gray-700 text-gray-100' 
+                          : 'hover:bg-gray-100 text-gray-900'
+                      }`}
+                      onClick={() => {
+                        setPracticeDropdownVisible(false);
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      Web Dev
+                    </Link>
+                    <Link
+                      href="/practice/dsa"
+                      className={`flex items-center px-4 py-2 text-sm transition-all duration-200 ${
+                        isDarkMode 
+                          ? 'hover:bg-gray-700 text-gray-100' 
+                          : 'hover:bg-gray-100 text-gray-900'
+                      }`}
+                      onClick={() => {
+                        setPracticeDropdownVisible(false);
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      DSA
+                    </Link>
+                  </div>
+                )}
+              </div>
+
               <Link 
                 href="/subjects" 
                 className={`flex items-center py-3 px-4 rounded-md transition-all duration-200 ${

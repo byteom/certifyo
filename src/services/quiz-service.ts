@@ -68,3 +68,87 @@ export async function generateCustomQuizQuestions(
 // 2. Parse the response into a structured format
 // 3. Handle error cases and retries
 // 4. Cache results to avoid unnecessary API calls
+
+/*
+// Example of a real implementation using Groq API
+export async function generateQuizQuestionsWithGroq(
+  apiKey: string,
+  subject: string,
+  count: number = 25
+): Promise<AIGeneratedQuestion[]> {
+  const prompt = `
+    Generate ${count} multiple-choice quiz questions about ${subject}.
+    Each question should have 4 options with exactly one correct answer.
+    Format the response as a JSON array of objects with the following structure:
+    [
+      {
+        "id": 1,
+        "text": "Question text here?",
+        "options": ["Option A", "Option B", "Option C", "Option D"],
+        "correctAnswer": 0 // Index of the correct answer (0-3)
+      }
+    ]
+    Make sure the questions are challenging but fair, and cover a range of topics within ${subject}.
+  `;
+
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'llama3-70b-8192',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are an expert quiz creator specializing in educational content.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 4000
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Groq API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const content = data.choices[0].message.content;
+    
+    // Parse the JSON response
+    try {
+      // Extract JSON from the response (in case there's additional text)
+      const jsonMatch = content.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) throw new Error('No valid JSON found in response');
+      
+      const questions = JSON.parse(jsonMatch[0]);
+      
+      // Validate the structure
+      if (!Array.isArray(questions)) throw new Error('Response is not an array');
+      
+      // Ensure each question has the required fields
+      return questions.map((q, index) => ({
+        id: index + 1,
+        text: q.text || `Question ${index + 1}`,
+        options: Array.isArray(q.options) && q.options.length === 4 ? q.options : 
+          ['Option A', 'Option B', 'Option C', 'Option D'],
+        correctAnswer: typeof q.correctAnswer === 'number' && q.correctAnswer >= 0 && q.correctAnswer < 4 ? 
+          q.correctAnswer : 0
+      }));
+    } catch (parseError) {
+      console.error('Error parsing Groq response:', parseError);
+      throw new Error('Failed to parse quiz questions from AI response');
+    }
+  } catch (error) {
+    console.error('Error calling Groq API:', error);
+    throw error;
+  }
+}
+*/

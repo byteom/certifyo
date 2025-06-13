@@ -49,6 +49,11 @@ export default function LanguageSelector({
     // State to track if the component has mounted on the client
     const [isMounted, setIsMounted] = useState(false);
 
+    // Effect to update internal state when prop changes
+    useEffect(() => {
+        setSelectedLanguageId(propSelectedLanguageId);
+    }, [propSelectedLanguageId]);
+
     // Effect to read from localStorage on the client after mount (hydration)
     useEffect(() => {
         if (typeof window !== 'undefined') {

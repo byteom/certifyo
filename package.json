@@ -27,12 +27,9 @@
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.1",
     "lucide-react": "^0.510.0",
-<<<<<<< HEAD
     "monaco-editor": "^0.52.2",
-    "nanoid": "^5.1.5",
-=======
     "mongoose": "^8.15.1",
->>>>>>> upstream/main
+    "nanoid": "^5.1.5",
     "next": "^15.3.2",
     "next-seo": "^6.6.0",
     "prismjs": "^1.30.0",
@@ -40,6 +37,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
+    "react-resizable-panels": "^3.0.2",
     "react-share": "^5.2.2",
     "react-syntax-highlighter": "^15.6.1",
     "rehype-prism-plus": "^2.0.1",

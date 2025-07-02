@@ -1,27 +1,29 @@
 import BlogClientComponent from "./BlogClientComponent";
 import { BlogPost } from "@/types";
 
-async function getBlogPosts(): Promise<BlogPost[]> {
-  try {
-    const res = await fetch("https://certifyo.vercel.app/api/blog", {
-      cache: "no-store",
-    });
+export const runtime = 'edge';
 
-    if (!res.ok) {
-      throw new Error(`Failed to fetch blog posts: ${res.statusText}`);
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching blog posts:", error);
-    return [];
+// Static blog data instead of dynamic fetching
+const staticBlogPosts: BlogPost[] = [
+  {
+    title: 'Getting Started with Next.js',
+    description: 'Learn the basics of Next.js and how to build modern web applications.',
+    slug: 'getting-started-with-nextjs',
+    category: 'Technology',
+    createdAt: new Date('2024-01-15').toISOString(),
+    content: 'This is a sample blog post about Next.js...'
+  },
+  {
+    title: 'The Future of Web Development',
+    description: 'Explore the latest trends and technologies shaping the future of web development.',
+    slug: 'future-of-web-development',
+    category: 'Technology',
+    createdAt: new Date('2024-01-20').toISOString(),
+    content: 'Web development is evolving rapidly...'
   }
-}
+];
 
 export default async function BlogPage() {
-  const blogs = await getBlogPosts();
   const categories = ["All", "Technology", "Travel", "Food"];
-
-  return <BlogClientComponent blogs={blogs} categories={categories} />;
+  return <BlogClientComponent blogs={staticBlogPosts} categories={categories} />;
 }

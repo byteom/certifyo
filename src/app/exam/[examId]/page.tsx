@@ -5,6 +5,8 @@
 import ExamClient from '@/components/exam/ExamClient'
 import { Metadata } from 'next'
 
+export const runtime = 'edge';
+
 type Props = {
   params: Promise<{ examId: string }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>

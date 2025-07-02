@@ -1,6 +1,8 @@
 import React from 'react';
 import SubjectQuizPageClient from './SubjectQuizPageClient';
 
+export const runtime = 'edge';
+
 export default async function SubjectQuizPage({ 
   params 
 }: { 

@@ -1,6 +1,8 @@
 import React from 'react';
 import QuestionPageClient from './QuestionPageClient';
 
+export const runtime = 'edge';
+
 export default async function QuestionPage({
   params,
 }: {

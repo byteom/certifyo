@@ -47,7 +47,7 @@ export default function ProfilePage() {
     },
     interests: [] as string[],
     languages: [] as string[],
-    groq_api_key: ''
+    groq_api_key: '' as string | undefined
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

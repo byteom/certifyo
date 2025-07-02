@@ -3,7 +3,8 @@ import React, { useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useThemeStore } from '@/store/themeStore';
-import { BookOpen, Award, Briefcase, Video, Trophy, ArrowRight, Globe, DivideIcon as LucideIcon } from 'lucide-react';
+import { BookOpen, Award, Briefcase, Video, Trophy, ArrowRight, Globe } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import Hero from '@/components/Hero';
 
 interface StatProps {

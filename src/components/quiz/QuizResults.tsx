@@ -98,7 +98,7 @@ export default function QuizResults({
                   strokeWidth="10"
                   fill="none"
                 />
-                <motion.circle
+                <circle
                   className={`stroke-current ${
                     isPassing
                       ? isDarkMode ? 'text-green-500' : 'text-green-600'
@@ -110,12 +110,8 @@ export default function QuizResults({
                   strokeWidth="10"
                   fill="none"
                   strokeDasharray="251.2"
-                  strokeDashoffset="251.2"
-                  initial={{ strokeDashoffset: 251.2 }}
-                  animate={{ 
-                    strokeDashoffset: 251.2 - (percentage / 100) * 251.2 
-                  }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
+                  strokeDashoffset={251.2 - (percentage / 100) * 251.2}
+                  style={{ transition: 'stroke-dashoffset 1.5s ease-out' }}
                   transform="rotate(-90 50 50)"
                 />
                 <text

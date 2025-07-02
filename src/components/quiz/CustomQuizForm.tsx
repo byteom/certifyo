@@ -37,7 +37,7 @@ export default function CustomQuizForm({ isDarkMode, disabled }: CustomQuizFormP
       setTimeout(() => {
         router.push(`/quiz/custom?topic=${encodeURIComponent(topic)}&difficulty=${difficulty}&count=${questionCount}`);
       }, 1000);
-    } catch (_err) {
+    } catch {
       setError('Failed to generate quiz. Please try again.');
       setIsLoading(false);
     }

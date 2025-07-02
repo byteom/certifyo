@@ -207,7 +207,6 @@ export default function SubjectQuizPage({ params }: { params: Promise<{ subjectI
       <QuizResults
         correctAnswers={correctAnswers}
         totalQuestions={questions.length}
-        passingScore={70}
         onReturnToQuizzes={handleReturnToQuizzes}
         isDarkMode={isDarkMode}
         subject={subject.name}

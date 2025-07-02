@@ -25,7 +25,7 @@ export default function CustomQuizPage() {
   // Instead of using useSearchParams, we'll use URL parsing
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState('medium');
-  const [count, setCount] = useState(10);
+  const [_count, setCount] = useState(10);
   
   const [questions, setQuestions] = useState<AIGeneratedQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);

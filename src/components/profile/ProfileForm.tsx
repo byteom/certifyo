@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Github, Linkedin, Globe, MapPin, Phone, User, BookOpen, Languages, Heart, Code, Globe2, Key } from 'lucide-react';
+import { Github, Linkedin, Globe, MapPin, Phone, User, BookOpen, Languages, Key } from 'lucide-react';
 import { useThemeStore } from '../../store/themeStore';
 
 interface ProfileFormProps {

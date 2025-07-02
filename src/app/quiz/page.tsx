@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useThemeStore } from '@/store/themeStore';
 import { useAuthStore } from '@/store/authStore';
 import { supabase } from '@/lib/supabase';
-import { Brain, BookOpen, Lightbulb, Loader2, AlertTriangle, Settings } from 'lucide-react';
+import { Brain as _Brain, BookOpen, Lightbulb, Loader2, AlertTriangle, Settings } from 'lucide-react';
 import SubjectQuizCard from '@/components/quiz/SubjectQuizCard';
 import CustomQuizForm from '@/components/quiz/CustomQuizForm';
 import ApiKeyWarning from '@/components/quiz/ApiKeyWarning';

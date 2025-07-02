@@ -30,7 +30,7 @@ export default function ApiKeyWarning({ isDarkMode, onGoToProfile }: ApiKeyWarni
           }`}>
             <p>
               To use the AI Quiz feature, you need to add your Groq API key in your profile settings. 
-              The AI Quiz system uses Groq's powerful language models to generate personalized quizzes.
+              The AI Quiz system uses Groq&apos;s powerful language models to generate personalized quizzes.
             </p>
             <p className="mt-2">
               You can get a free API key by signing up at{' '}

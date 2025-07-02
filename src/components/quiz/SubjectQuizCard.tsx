@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Brain, ArrowRight, Lock } from 'lucide-react';
 import { Subject } from '@/types';
+import Image from 'next/image';
 
 interface SubjectQuizCardProps {
   subject: Subject;
@@ -31,10 +32,12 @@ export default function SubjectQuizCard({ subject, isDarkMode, disabled }: Subje
       onClick={handleStartQuiz}
     >
       <div className="h-40 overflow-hidden relative">
-        <img
+        <Image
           src={subject.image}
           alt={subject.name}
-          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+          fill
+          style={{ objectFit: 'cover' }}
+          className="transition-transform duration-300 hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
         <div className="absolute bottom-4 left-4">

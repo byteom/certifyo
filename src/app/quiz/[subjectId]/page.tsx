@@ -26,14 +26,14 @@ export default function SubjectQuizPage({ params }: { params: Promise<{ subjectI
   // Unwrap params using React.use()
   const { subjectId } = use(params);
   
-  const [subject, setSubject] = useState(subjects.find(s => s.id.toString() === subjectId));
+  const [subject, _setSubject] = useState(subjects.find(s => s.id.toString() === subjectId));
   const [questions, setQuestions] = useState<AIGeneratedQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [apiKey, setApiKey] = useState<string | null>(null);
+  const [_apiKey, setApiKey] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -185,7 +185,7 @@ export default function SubjectQuizPage({ params }: { params: Promise<{ subjectI
             Subject Not Found
           </h2>
           <p className={`mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-            The subject you're looking for doesn't exist.
+            The subject you&apos;re looking for doesn&apos;t exist.
           </p>
           <button
             onClick={handleReturnToQuizzes}

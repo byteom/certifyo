@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useThemeStore } from '@/store/themeStore';
 import dynamic from 'next/dynamic';
 import { Play, CheckCircle } from 'lucide-react';
@@ -38,6 +38,7 @@ export default function QuestionPageClient({
 }: {
   params: { category: string; questionId: string };
 }) {
+  const _params = params;
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
   const [code, setCode] = useState(mockQuestion.initialCode);
   const [output, setOutput] = useState('');
@@ -45,11 +46,7 @@ export default function QuestionPageClient({
   const [isRunning, setIsRunning] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  useEffect(() => {
-    updateIframeContent(code);
-  }, [code]);
-
-  const updateIframeContent = (htmlCode: string) => {
+  const updateIframeContent = useCallback((htmlCode: string) => {
     const fullHtml = `
       <!DOCTYPE html>
       <html>
@@ -77,7 +74,11 @@ export default function QuestionPageClient({
       </html>
     `;
     setIframeSrcDoc(fullHtml);
-  };
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    updateIframeContent(code);
+  }, [code, updateIframeContent]);
 
   const handleEditorChange = (value: string | undefined) => {
     if (value !== undefined) {

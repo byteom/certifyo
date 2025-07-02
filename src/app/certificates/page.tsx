@@ -284,29 +284,342 @@ export default function CertificatePage() {
     const studentName = certificate.profiles?.full_name || (type === 'exam' ? (certificate as Certificate).student_name : null) || 'Anonymous';
     const verificationUrl = `${window.location.origin}/verify/${certId}`;
 
-    const handleDownloadImage = () => {
+    const handleDownloadImage = async () => {
+      try {
       const certificateElement = document.getElementById('certificate-container');
-      if (certificateElement) {
-        html2canvas(certificateElement).then((canvas) => {
+        if (!certificateElement) {
+          console.error('Certificate element not found');
+          return;
+        }
+
+        // Show loading state
+        const downloadBtn = document.querySelector('[data-download="image"]');
+        if (downloadBtn) {
+          downloadBtn.innerHTML = '<div class="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full"></div>Processing...';
+          downloadBtn.setAttribute('disabled', 'true');
+        }
+
+        // Try multiple approaches for better compatibility
+        let canvas: HTMLCanvasElement;
+        
+        try {
+          // Approach 1: Wait for images to load, then capture
+          console.log('Trying Approach 1: High-quality capture...');
+          await new Promise(resolve => setTimeout(resolve, 500)); // Wait for any animations
+          
+          canvas = await html2canvas(certificateElement, {
+            scale: 2, // Higher quality
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            width: certificateElement.offsetWidth,
+            height: certificateElement.offsetHeight,
+            scrollX: 0,
+            scrollY: 0,
+            onclone: (clonedDoc) => {
+              // Ensure all images are loaded
+              const images = clonedDoc.querySelectorAll('img');
+              images.forEach(img => {
+                img.crossOrigin = 'anonymous';
+              });
+            }
+          });
+        } catch (error1) {
+          console.log('First approach failed, trying alternative...', error1);
+          
+          try {
+            // Approach 2: Simpler configuration
+            console.log('Trying Approach 2: Medium-quality capture...');
+            canvas = await html2canvas(certificateElement, {
+              scale: 1.5,
+              useCORS: false,
+              allowTaint: true,
+              backgroundColor: '#ffffff',
+              removeContainer: true,
+              foreignObjectRendering: false
+            });
+          } catch (error2) {
+            console.log('Second approach failed, trying final approach...', error2);
+            
+            // Approach 3: Create a simple canvas manually with all certificate content
+            console.log('Using Approach 3: Manual canvas creation (fallback)');
+            const rect = certificateElement.getBoundingClientRect();
+            canvas = document.createElement('canvas');
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            const ctx = canvas.getContext('2d');
+            
+            if (ctx) {
+              // Fill with white background
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              
+              // Add border
+              ctx.strokeStyle = '#4f46e5';
+              ctx.lineWidth = 4;
+              ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+              
+              // Certificate title
+              ctx.fillStyle = '#1f2937';
+              ctx.font = 'bold 32px Arial';
+              ctx.textAlign = 'center';
+              ctx.fillText('Certificate of Completion', canvas.width / 2, 80);
+              
+              // Student name
+              ctx.font = 'bold 24px Arial';
+              ctx.fillText('This is to certify that', canvas.width / 2, 140);
+              
+              ctx.font = 'bold 28px Arial';
+              ctx.fillStyle = '#4f46e5';
+              const studentName = type === 'exam' 
+                ? (certificate as Certificate).profiles?.full_name || (certificate as Certificate).student_name || 'Anonymous'
+                : (certificate as InternshipCertificate).profiles?.full_name || 'Anonymous';
+              ctx.fillText(studentName, canvas.width / 2, 180);
+              
+              // Certificate details
+              ctx.font = '18px Arial';
+              ctx.fillStyle = '#374151';
+              ctx.fillText('has successfully completed', canvas.width / 2, 220);
+              
+              if (type === 'exam') {
+                const examTitle = getExamTitle((certificate as Certificate).exam_id);
+                ctx.font = 'bold 20px Arial';
+                ctx.fillStyle = '#4f46e5';
+                ctx.fillText(examTitle, canvas.width / 2, 260);
+                
+                ctx.font = '16px Arial';
+                ctx.fillStyle = '#374151';
+                ctx.fillText(`with a score of ${(certificate as Certificate).score}%`, canvas.width / 2, 290);
+              } else {
+                const internship = (certificate as InternshipCertificate).internships;
+                ctx.font = 'bold 20px Arial';
+                ctx.fillStyle = '#4f46e5';
+                ctx.fillText(internship.title, canvas.width / 2, 260);
+                
+                ctx.font = '16px Arial';
+                ctx.fillStyle = '#374151';
+                ctx.fillText(`at ${internship.company}`, canvas.width / 2, 290);
+                ctx.fillText(`Duration: ${internship.duration}`, canvas.width / 2, 320);
+              }
+              
+              // Date
+              ctx.font = '16px Arial';
+              ctx.fillText(`Issued on: ${issueDate}`, canvas.width / 2, 380);
+              
+              // Certificate ID
+              ctx.font = '14px Arial';
+              ctx.fillStyle = '#6b7280';
+              ctx.fillText(`Certificate ID: ${certId}`, canvas.width / 2, 420);
+              
+              // Website
+              ctx.fillText('certifyo.tech', canvas.width / 2, canvas.height - 40);
+            }
+          }
+        }
+
+        // Create download link
+        const dataURL = canvas.toDataURL('image/png');
           const link = document.createElement('a');
-          link.download = `certificate-${certId}.png`;
-          link.href = canvas.toDataURL('image/png');
+        link.download = `certifyo-certificate-${certId}-${new Date().toISOString().split('T')[0]}.png`;
+        link.href = dataURL;
+        
+        // Trigger download
+        document.body.appendChild(link);
           link.click();
-        });
+        document.body.removeChild(link);
+
+        // Reset button state
+        if (downloadBtn) {
+          downloadBtn.innerHTML = '<Download className="h-5 w-5 mr-2" />Download Image';
+          downloadBtn.removeAttribute('disabled');
+        }
+      } catch (error) {
+        console.error('Error downloading image:', error);
+        alert('Failed to download image. Please try again.');
+        
+        // Reset button state on error
+        const downloadBtn = document.querySelector('[data-download="image"]');
+        if (downloadBtn) {
+          downloadBtn.innerHTML = '<Download className="h-5 w-5 mr-2" />Download Image';
+          downloadBtn.removeAttribute('disabled');
+        }
       }
     };
 
-    const handleDownloadPDF = () => {
+    const handleDownloadPDF = async () => {
+      try {
       const certificateElement = document.getElementById('certificate-container');
-      if (certificateElement) {
-        html2canvas(certificateElement).then((canvas) => {
+        if (!certificateElement) {
+          console.error('Certificate element not found');
+          return;
+        }
+
+        // Show loading state
+        const downloadBtn = document.querySelector('[data-download="pdf"]');
+        if (downloadBtn) {
+          downloadBtn.innerHTML = '<div class="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full"></div>Processing...';
+          downloadBtn.setAttribute('disabled', 'true');
+        }
+
+        // Try multiple approaches for better compatibility
+        let canvas: HTMLCanvasElement;
+        
+        try {
+          // Approach 1: Wait for images to load, then capture
+          console.log('PDF: Trying Approach 1: High-quality capture...');
+          await new Promise(resolve => setTimeout(resolve, 500)); // Wait for any animations
+          
+          canvas = await html2canvas(certificateElement, {
+            scale: 2, // Higher quality
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            width: certificateElement.offsetWidth,
+            height: certificateElement.offsetHeight,
+            scrollX: 0,
+            scrollY: 0,
+            onclone: (clonedDoc) => {
+              // Ensure all images are loaded
+              const images = clonedDoc.querySelectorAll('img');
+              images.forEach(img => {
+                img.crossOrigin = 'anonymous';
+              });
+            }
+          });
+        } catch (error1) {
+          console.log('PDF: First approach failed, trying alternative...', error1);
+          
+          try {
+            // Approach 2: Simpler configuration
+            console.log('PDF: Trying Approach 2: Medium-quality capture...');
+            canvas = await html2canvas(certificateElement, {
+              scale: 1.5,
+              useCORS: false,
+              allowTaint: true,
+              backgroundColor: '#ffffff',
+              removeContainer: true,
+              foreignObjectRendering: false
+            });
+          } catch (error2) {
+            console.log('PDF: Second approach failed, trying final approach...', error2);
+            
+            // Approach 3: Create a simple canvas manually with all certificate content
+            console.log('PDF: Using Approach 3: Manual canvas creation (fallback)');
+            const rect = certificateElement.getBoundingClientRect();
+            canvas = document.createElement('canvas');
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            const ctx = canvas.getContext('2d');
+            
+            if (ctx) {
+              // Fill with white background
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              
+              // Add border
+              ctx.strokeStyle = '#4f46e5';
+              ctx.lineWidth = 4;
+              ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+              
+              // Certificate title
+              ctx.fillStyle = '#1f2937';
+              ctx.font = 'bold 32px Arial';
+              ctx.textAlign = 'center';
+              ctx.fillText('Certificate of Completion', canvas.width / 2, 80);
+              
+              // Student name
+              ctx.font = 'bold 24px Arial';
+              ctx.fillText('This is to certify that', canvas.width / 2, 140);
+              
+              ctx.font = 'bold 28px Arial';
+              ctx.fillStyle = '#4f46e5';
+              const studentName = type === 'exam' 
+                ? (certificate as Certificate).profiles?.full_name || (certificate as Certificate).student_name || 'Anonymous'
+                : (certificate as InternshipCertificate).profiles?.full_name || 'Anonymous';
+              ctx.fillText(studentName, canvas.width / 2, 180);
+              
+              // Certificate details
+              ctx.font = '18px Arial';
+              ctx.fillStyle = '#374151';
+              ctx.fillText('has successfully completed', canvas.width / 2, 220);
+              
+              if (type === 'exam') {
+                const examTitle = getExamTitle((certificate as Certificate).exam_id);
+                ctx.font = 'bold 20px Arial';
+                ctx.fillStyle = '#4f46e5';
+                ctx.fillText(examTitle, canvas.width / 2, 260);
+                
+                ctx.font = '16px Arial';
+                ctx.fillStyle = '#374151';
+                ctx.fillText(`with a score of ${(certificate as Certificate).score}%`, canvas.width / 2, 290);
+              } else {
+                const internship = (certificate as InternshipCertificate).internships;
+                ctx.font = 'bold 20px Arial';
+                ctx.fillStyle = '#4f46e5';
+                ctx.fillText(internship.title, canvas.width / 2, 260);
+                
+                ctx.font = '16px Arial';
+                ctx.fillStyle = '#374151';
+                ctx.fillText(`at ${internship.company}`, canvas.width / 2, 290);
+                ctx.fillText(`Duration: ${internship.duration}`, canvas.width / 2, 320);
+              }
+              
+              // Date
+              ctx.font = '16px Arial';
+              ctx.fillText(`Issued on: ${issueDate}`, canvas.width / 2, 380);
+              
+              // Certificate ID
+              ctx.font = '14px Arial';
+              ctx.fillStyle = '#6b7280';
+              ctx.fillText(`Certificate ID: ${certId}`, canvas.width / 2, 420);
+              
+              // Website
+              ctx.fillText('certifyo.tech', canvas.width / 2, canvas.height - 40);
+            }
+          }
+        }
+
+        // Create PDF
           const imgData = canvas.toDataURL('image/png');
-          const pdf = new jsPDF('landscape');
-          const imgWidth = 297; // A4 width in mm (landscape)
+        const pdf = new jsPDF('landscape', 'mm', 'a4');
+        
+        // Get PDF dimensions
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        
+        // Calculate image dimensions to fit properly
+        const imgWidth = pdfWidth - 20; // Leave 10mm margin on each side
           const imgHeight = (canvas.height * imgWidth) / canvas.width;
-          pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-          pdf.save(`certificate-${certId}.pdf`);
-        });
+        
+        // If image is too tall, scale it down
+        const finalImgHeight = imgHeight > (pdfHeight - 20) ? (pdfHeight - 20) : imgHeight;
+        const finalImgWidth = (canvas.width * finalImgHeight) / canvas.height;
+        
+        // Center the image
+        const x = (pdfWidth - finalImgWidth) / 2;
+        const y = (pdfHeight - finalImgHeight) / 2;
+        
+        // Add image to PDF
+        pdf.addImage(imgData, 'PNG', x, y, finalImgWidth, finalImgHeight);
+        
+        // Save PDF
+        pdf.save(`certifyo-certificate-${certId}-${new Date().toISOString().split('T')[0]}.pdf`);
+
+        // Reset button state
+        if (downloadBtn) {
+          downloadBtn.innerHTML = '<Download className="h-5 w-5 mr-2" />Download PDF';
+          downloadBtn.removeAttribute('disabled');
+        }
+      } catch (error) {
+        console.error('Error downloading PDF:', error);
+        alert('Failed to download PDF. Please try again.');
+        
+        // Reset button state on error
+        const downloadBtn = document.querySelector('[data-download="pdf"]');
+        if (downloadBtn) {
+          downloadBtn.innerHTML = '<Download className="h-5 w-5 mr-2" />Download PDF';
+          downloadBtn.removeAttribute('disabled');
+        }
       }
     };
 
@@ -396,7 +709,8 @@ export default function CertificatePage() {
           {/* Download Buttons */}
           <button
             onClick={handleDownloadImage}
-            className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+            data-download="image"
+            className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Download className="h-5 w-5 mr-2" />
             Download Image
@@ -404,7 +718,8 @@ export default function CertificatePage() {
 
           <button
             onClick={handleDownloadPDF}
-            className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+            data-download="pdf"
+            className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Download className="h-5 w-5 mr-2" />
             Download PDF
@@ -425,9 +740,18 @@ export default function CertificatePage() {
         </div>
 
         {/* Certificate Container */}
-        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-8 w-[95%] max-w-5xl mx-4 shadow-2xl relative">
+        <div className="rounded-lg p-8 w-[95%] max-w-5xl mx-4 shadow-2xl relative" style={{ background: 'linear-gradient(to right, #eef2ff, #faf5ff)' }}>
           {/* Certificate Content */}
-          <div id="certificate-container" className="border-4 border-indigo-600 p-8 rounded-lg relative bg-white font-mono">
+          <div 
+            id="certificate-container" 
+            className="border-4 border-indigo-600 p-8 rounded-lg relative font-mono"
+            style={{
+              width: '100%',
+              minHeight: '600px',
+              boxSizing: 'border-box',
+              backgroundColor: '#ffffff'
+            }}
+          >
             {/* QR Code at Top Left Corner */}
             <div className="absolute top-4 left-4 bg-white p-2 rounded-lg shadow-md">
               <QRCodeSVG value={verificationUrl} size={100} />
@@ -467,35 +791,39 @@ export default function CertificatePage() {
               {/* Signatures Section */}
               <div className="flex justify-between items-center mt-8">
                 <div className="text-center">
-                  <Image src="/ins.svg" alt="Instructor Signature" className="h-16 mx-auto mb-2" />
-                  <div className="border-b-2 border-indigo-600 w-24 mx-auto"></div>
-                  <p className="text-sm text-gray-500 mt-2">Instructor</p>
+                  <div className="h-16 w-32 mx-auto mb-2 flex items-center justify-center rounded border-2 border-dashed" style={{ backgroundColor: '#f3f4f6', borderColor: '#d1d5db' }}>
+                    <span className="text-xs font-mono" style={{ color: '#6b7280' }}>Instructor</span>
+                  </div>
+                  <div className="border-b-2 w-24 mx-auto" style={{ borderColor: '#4f46e5' }}></div>
+                  <p className="text-sm mt-2" style={{ color: '#6b7280' }}>Instructor</p>
                 </div>
                 <div className="text-center">
-                  <Image src="/ceo.svg" alt="CEO Signature" className="h-16 mx-auto mb-2" />
-                  <div className="border-b-2 border-indigo-600 w-24 mx-auto"></div>
-                  <p className="text-sm text-gray-500 mt-2">CEO</p>
+                  <div className="h-16 w-32 mx-auto mb-2 flex items-center justify-center rounded border-2 border-dashed" style={{ backgroundColor: '#f3f4f6', borderColor: '#d1d5db' }}>
+                    <span className="text-xs font-mono" style={{ color: '#6b7280' }}>CEO</span>
+                  </div>
+                  <div className="border-b-2 w-24 mx-auto" style={{ borderColor: '#4f46e5' }}></div>
+                  <p className="text-sm mt-2" style={{ color: '#6b7280' }}>CEO</p>
                 </div>
               </div>
             </div>
 
             {/* All Logos at Bottom */}
             <div className="flex justify-center items-center gap-6 mt-8 pt-4 border-t">
-              <Image src="/certifyoLogo.PNG" alt="CertifyO Logo" className="h-14" />
-              <Image src="/skill.png" alt="Skill India" className="h-12" />
-              <Image src="/ncs.png" alt="NCS" className="h-12" />
-              <Image src="/msme.png" alt="MSME Registered" className="h-12" />
+              <Image src="/logo.png" alt="CertifyO Logo" width={56} height={56} className="h-14" />
+              <Image src="/images/skill.png" alt="Skill India" width={48} height={48} className="h-12" />
+              <Image src="/images/ncs.png" alt="NCS" width={48} height={48} className="h-12" />
+              <Image src="/images/msme.png" alt="MSME Registered" width={48} height={48} className="h-12" />
 
             </div>
             <br />
             {/* Certificate Footer */}
             <div className="absolute bottom-4 left-4 text-left">
-              <p className="text-sm text-gray-500">Certificate ID: {certId}</p>
-              <p className="text-sm text-gray-500">Issue Date: {issueDate}</p>
+              <p className="text-sm" style={{ color: '#6b7280' }}>Certificate ID: {certId}</p>
+              <p className="text-sm" style={{ color: '#6b7280' }}>Issue Date: {issueDate}</p>
             </div>
 
             <div className="absolute bottom-4 right-4 text-right">
-              <p className="text-sm text-gray-500">certifyo.tech</p>
+              <p className="text-sm" style={{ color: '#6b7280' }}>certifyo.tech</p>
             </div>
           </div>
         </div>

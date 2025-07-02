@@ -5,7 +5,7 @@ import Image from 'next/image';
 import {
   User, Award, BookOpen, Sun, Moon, Menu, X as XIcon, LogOut,
   Settings, AlignCenterVertical as Certificate, Video, Trophy, Newspaper, Code, ChevronDown,
-  Laptop, Brain
+  Laptop, Brain, MessageSquare
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useThemeStore } from '../store/themeStore';
@@ -36,24 +36,33 @@ export default function Navigation() {
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (eventDropdownRef.current && !eventDropdownRef.current.contains(event.target as Node)) {
-        setEventDropdownVisible(false);
+      const target = event.target as Node;
+      
+      // Check if click is outside practice dropdown
+      if (practiceDropdownRef.current && !practiceDropdownRef.current.contains(target)) {
+        setPracticeDropdownVisible(false);
       }
-      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
-        setProfileDropdownVisible(false);
-      }
-      if (solutionsDropdownRef.current && !solutionsDropdownRef.current.contains(event.target as Node)) {
+      
+      // Check if click is outside solutions dropdown
+      if (solutionsDropdownRef.current && !solutionsDropdownRef.current.contains(target)) {
         setSolutionsDropdownVisible(false);
       }
-      if (practiceDropdownRef.current && !practiceDropdownRef.current.contains(event.target as Node)) {
-        setPracticeDropdownVisible(false);
+      
+      // Check if click is outside event dropdown
+      if (eventDropdownRef.current && !eventDropdownRef.current.contains(target)) {
+        setEventDropdownVisible(false);
+      }
+      
+      // Check if click is outside profile dropdown
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(target)) {
+        setProfileDropdownVisible(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-    };
+    };  
   }, []);
 
   const handleProfileClick = () => {
@@ -98,10 +107,7 @@ export default function Navigation() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
               {/* Practice Dropdown */}
-              <div className="relative" ref={practiceDropdownRef}
-                onMouseEnter={() => setPracticeDropdownVisible(true)}
-                onMouseLeave={() => setPracticeDropdownVisible(false)}
-              >
+              <div className="relative" ref={practiceDropdownRef}>
                 <button
                   onClick={() => setPracticeDropdownVisible(!practiceDropdownVisible)}
                   className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
@@ -121,7 +127,6 @@ export default function Navigation() {
                         ? 'bg-gray-800 border-gray-700'
                         : 'bg-white border-gray-200'
                     }`}
-                    onClick={(e) => e.stopPropagation()}
                   >
                     <Link
                       href="/practice/web-dev"
@@ -164,10 +169,7 @@ export default function Navigation() {
               </div>
 
               {/* Solutions Dropdown */}
-              <div className="relative" ref={solutionsDropdownRef}
-                onMouseEnter={() => setSolutionsDropdownVisible(true)}
-                onMouseLeave={() => setSolutionsDropdownVisible(false)}
-              >
+              <div className="relative" ref={solutionsDropdownRef}>
                 <button
                   onClick={() => setSolutionsDropdownVisible(!solutionsDropdownVisible)}
                   className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
@@ -187,7 +189,6 @@ export default function Navigation() {
                         ? 'bg-gray-800 border-gray-700'
                         : 'bg-white border-gray-200'
                     }`}
-                    onClick={(e) => e.stopPropagation()}
                   >
                     <Link
                       href="/subjects"
@@ -255,10 +256,24 @@ export default function Navigation() {
                 <span className="text-sm lg:text-sm font-medium">Blog</span>
               </Link>
 
-              <div className="relative" ref={eventDropdownRef}
-                onMouseEnter={() => setEventDropdownVisible(true)}
-                onMouseLeave={() => setEventDropdownVisible(false)}
+              <a
+                href="https://interview.certifyo.tech/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer relative group ${
+                  isDarkMode
+                    ? 'hover:bg-red-900/20 hover:text-red-400 hover:shadow-lg hover:shadow-red-500/25'
+                    : 'hover:bg-red-50 hover:text-red-600 hover:shadow-lg hover:shadow-red-500/25'
+                } transform hover:scale-105 hover:-translate-y-0.5`}
               >
+                <MessageSquare className="h-5 w-5" />
+                <span className="text-sm lg:text-sm font-medium">Interview Practice</span>
+                <span className="absolute -top-1 -right-1 px-1.5 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full animate-pulse">
+                  NEW
+                </span>
+              </a>
+
+              <div className="relative" ref={eventDropdownRef}>
                 <button
                   onClick={() => setEventDropdownVisible(!eventDropdownVisible)}
                   className={`flex items-center space-x-1 transition-all duration-200 px-3 py-2 rounded-md cursor-pointer ${
@@ -277,7 +292,6 @@ export default function Navigation() {
                         ? 'bg-gray-800 border-gray-700'
                         : 'bg-white border-gray-200'
                     }`}
-                    onClick={(e) => e.stopPropagation()}
                   >
                     <Link
                       href="/competitions"
@@ -358,7 +372,6 @@ export default function Navigation() {
                           ? 'bg-gray-800 border-gray-700'
                           : 'bg-white border-gray-200'
                       }`}
-                      onClick={(e) => e.stopPropagation()}
                     >
                       <button
                         onClick={handleProfileClick}
@@ -466,7 +479,6 @@ export default function Navigation() {
                       ? 'bg-gray-800' 
                       : 'bg-gray-50'
                   }`}
-                  onClick={(e) => e.stopPropagation()}
                   >
                     <Link
                       href="/practice/web-dev"
@@ -559,6 +571,24 @@ export default function Navigation() {
                 <Newspaper className="h-5 w-5 mr-3" />
                 <span className="font-medium">Blog</span>
               </Link>
+
+              <a
+                href="https://interview.certifyo.tech/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center py-3 px-4 rounded-md transition-all duration-200 relative group ${
+                  isDarkMode 
+                    ? 'hover:bg-red-900/20 hover:text-red-400 hover:shadow-lg hover:shadow-red-500/25' 
+                    : 'hover:bg-red-50 hover:text-red-600 hover:shadow-lg hover:shadow-red-500/25'
+                } transform hover:scale-105`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <MessageSquare className="h-5 w-5 mr-3" />
+                <span className="font-medium">Interview Practice</span>
+                <span className="absolute -top-1 -right-1 px-1.5 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full animate-pulse">
+                  NEW
+                </span>
+              </a>
               
               <div className="relative">
                 <button
@@ -576,7 +606,6 @@ export default function Navigation() {
                       ? 'bg-gray-800' 
                       : 'bg-gray-50'
                   }`}
-                  onClick={(e) => e.stopPropagation()}
                   >
                     <Link
                       href="/competitions"

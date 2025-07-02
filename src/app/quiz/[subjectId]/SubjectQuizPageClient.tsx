@@ -25,7 +25,12 @@ export default function SubjectQuizPageClient({ params }: { params: { subjectId:
   
   const { subjectId } = params;
   
-  const [subject, _setSubject] = useState(subjects.find(s => s.id.toString() === subjectId));
+  const [subject, _setSubject] = useState(() => {
+    // Try to find by string ID first, then by numeric ID
+    const foundSubject = subjects.find(s => s.id.toString() === subjectId) || 
+                        subjects.find(s => s.id === parseInt(subjectId, 10));
+    return foundSubject || null;
+  });
   const [questions, setQuestions] = useState<AIGeneratedQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
@@ -110,29 +115,6 @@ export default function SubjectQuizPageClient({ params }: { params: { subjectId:
 
   const handleSubmitQuiz = () => {
     setQuizCompleted(true);
-    
-    // Optional: Save quiz results to database
-    if (user && subject) {
-      try {
-        const score = selectedAnswers.filter(
-          (answer, index) => answer === questions[index].correctAnswer
-        ).length;
-        
-        const percentage = Math.round((score / questions.length) * 100);
-        
-        supabase.from('quiz_history').insert([{
-          user_id: user.id,
-          subject: subject.name,
-          score: percentage,
-          total_questions: questions.length,
-          is_custom: false
-        }]).then(({ error }) => {
-          if (error) console.error('Error saving quiz results:', error);
-        });
-      } catch (err) {
-        console.error('Error processing quiz results:', err);
-      }
-    }
   };
 
   const handleReturnToQuizzes = () => {
@@ -209,6 +191,8 @@ export default function SubjectQuizPageClient({ params }: { params: { subjectId:
         onReturnToQuizzes={handleReturnToQuizzes}
         isDarkMode={isDarkMode}
         subject={subject.name}
+        questions={questions}
+        selectedAnswers={selectedAnswers}
       />
     );
   }
@@ -269,45 +253,46 @@ export default function SubjectQuizPageClient({ params }: { params: { subjectId:
           />
         )}
 
-        {/* Navigation buttons */}
-        <div className="mt-8 flex justify-between">
+        {/* Navigation and submit controls */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mt-8 gap-4">
           <button
             onClick={handlePreviousQuestion}
             disabled={currentQuestionIndex === 0}
-            className={`px-6 py-2 rounded-lg ${
+            className={`px-6 py-2 rounded-lg font-medium transition-colors ${
               currentQuestionIndex === 0
-                ? `${isDarkMode ? 'bg-gray-700 text-gray-500' : 'bg-gray-200 text-gray-400'} cursor-not-allowed`
-                : `${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`
-            } transition-colors`}
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : isDarkMode
+                ? 'bg-gray-700 text-white hover:bg-gray-600'
+                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+            }`}
           >
             Previous
           </button>
-
-          {currentQuestionIndex < questions.length - 1 ? (
-            <button
-              onClick={handleNextQuestion}
-              disabled={selectedAnswers[currentQuestionIndex] === undefined}
-              className={`px-6 py-2 rounded-lg ${
-                selectedAnswers[currentQuestionIndex] === undefined
-                  ? `${isDarkMode ? 'bg-indigo-800 text-indigo-300' : 'bg-indigo-300 text-indigo-700'} opacity-70 cursor-not-allowed`
-                  : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-              } transition-colors`}
-            >
-              Next
-            </button>
-          ) : (
-            <button
-              onClick={handleSubmitQuiz}
-              disabled={selectedAnswers[currentQuestionIndex] === undefined}
-              className={`px-6 py-2 rounded-lg ${
-                selectedAnswers[currentQuestionIndex] === undefined
-                  ? `${isDarkMode ? 'bg-green-800 text-green-300' : 'bg-green-300 text-green-700'} opacity-70 cursor-not-allowed`
-                  : 'bg-green-600 hover:bg-green-700 text-white'
-              } transition-colors`}
-            >
-              Submit Quiz
-            </button>
-          )}
+          <div className="flex-1 text-center">
+            <span className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Question {currentQuestionIndex + 1} of {questions.length}</span>
+          </div>
+          <button
+            onClick={handleNextQuestion}
+            disabled={currentQuestionIndex === questions.length - 1}
+            className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              currentQuestionIndex === questions.length - 1
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : isDarkMode
+                ? 'bg-gray-700 text-white hover:bg-gray-600'
+                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+            }`}
+          >
+            Next
+          </button>
+        </div>
+        {/* Submit button always visible */}
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={handleSubmitQuiz}
+            className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-indigo-700 transition-colors shadow-lg"
+          >
+            Submit Quiz
+          </button>
         </div>
       </div>
     </div>

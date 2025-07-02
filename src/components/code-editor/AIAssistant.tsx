@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, memo, useMemo, useCallback } from 'react';
 import { Bot, X, ChevronsUp, Sparkles, Code, CheckCircle2, Copy, Loader2, Settings } from 'lucide-react';
-import { getAIAssistance, explainCode, getCodeCompletions } from '@/services/ai-assistance'; // Corrected imports
+import { getAIAssistance } from '@/services/ai-assistance';
 import { AIAssistantProps, AIAssistanceMode } from '@/types/code-editor'; // Adjusted import
 import AISettings from './AISettings'; // Assuming AISettings will be migrated later
 import CodeSnippetViewer from './CodeSnippetViewer'; // Assuming CodeSnippetViewer will be migrated later
@@ -332,7 +332,8 @@ export default function AIAssistant({
       const result = await getAIAssistance({
         prompt: contextPrompt,
         code: code,
-        language
+        language,
+        apiKey: process.env.OPENAI_API_KEY || '', // Provide empty string as fallback
       });
 
       if (!result.success) {
@@ -373,9 +374,10 @@ export default function AIAssistant({
     setError(null);
 
     try {
-      const result = await explainCode({
-        code: code,
-        language
+      const result = await getAIAssistance({
+        prompt: code,
+        language,
+        apiKey: '' // Provide a fallback or fetch from user profile if needed
       });
 
       if (!result.success) {
@@ -416,9 +418,10 @@ export default function AIAssistant({
     setError(null);
 
     try {
-      const result = await getCodeCompletions({
-        code: code,
-        language
+      const result = await getAIAssistance({
+        prompt: code,
+        language,
+        apiKey: '' // Provide a fallback or fetch from user profile if needed
       });
 
       if (!result.success) {

@@ -8,6 +8,8 @@ interface QuizResultsProps {
   onReturnToQuizzes: () => void;
   isDarkMode: boolean;
   subject: string;
+  questions?: { id: number; text: string; options: string[]; correctAnswer: number; }[];
+  selectedAnswers?: number[];
 }
 
 export default function QuizResults({ 
@@ -15,7 +17,9 @@ export default function QuizResults({
   totalQuestions, 
   onReturnToQuizzes,
   isDarkMode,
-  subject
+  subject,
+  questions,
+  selectedAnswers
 }: QuizResultsProps) {
   const percentage = Math.round((correctAnswers / totalQuestions) * 100);
   const isPassing = percentage >= 70;
@@ -180,6 +184,69 @@ export default function QuizResults({
               Download Certificate
             </motion.button>
           </div>
+          
+          {/* Detailed per-question report */}
+          {questions && selectedAnswers && (
+            <div className="mt-12">
+              <h3 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Detailed Report</h3>
+              <div className="space-y-6">
+                {questions.map((q, idx) => {
+                  const userAnswerIdx = selectedAnswers[idx];
+                  const isCorrect = userAnswerIdx === q.correctAnswer;
+                  return (
+                    <div
+                      key={q.id}
+                      className={`rounded-lg p-6 border shadow-sm ${
+                        isDarkMode
+                          ? isCorrect
+                            ? 'bg-green-900/20 border-green-700'
+                            : userAnswerIdx === undefined
+                              ? 'bg-gray-800 border-gray-700'
+                              : 'bg-red-900/20 border-red-700'
+                          : isCorrect
+                            ? 'bg-green-50 border-green-300'
+                            : userAnswerIdx === undefined
+                              ? 'bg-gray-100 border-gray-300'
+                              : 'bg-red-50 border-red-300'
+                      }`}
+                    >
+                      <div className="mb-2 flex items-center">
+                        <span className={`font-semibold mr-2 ${isDarkMode ? 'text-indigo-300' : 'text-indigo-600'}`}>Q{idx + 1}:</span>
+                        <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{q.text}</span>
+                      </div>
+                      <div className="space-y-1 ml-6">
+                        {q.options.map((opt, optIdx) => {
+                          const isUser = userAnswerIdx === optIdx;
+                          const isAns = q.correctAnswer === optIdx;
+                          return (
+                            <div
+                              key={optIdx}
+                              className={`px-3 py-2 rounded flex items-center gap-2 text-sm font-medium
+                                ${isAns && isUser ? (isDarkMode ? 'bg-green-700 text-white' : 'bg-green-200 text-green-900')
+                                  : isAns ? (isDarkMode ? 'bg-green-900/40 text-green-300' : 'bg-green-50 text-green-700')
+                                  : isUser && !isAns ? (isDarkMode ? 'bg-red-900/40 text-red-300' : 'bg-red-100 text-red-700')
+                                  : isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-50 text-gray-700'}
+                              `}
+                            >
+                              {isUser && isAns && <span>✅</span>}
+                              {isUser && !isAns && <span>❌</span>}
+                              {isAns && !isUser && <span>✔</span>}
+                              <span>{opt}</span>
+                              {isUser && <span className="ml-2 italic">(Your answer)</span>}
+                              {isAns && <span className="ml-2 italic">(Correct answer)</span>}
+                            </div>
+                          );
+                        })}
+                        {userAnswerIdx === undefined && (
+                          <div className="text-xs text-gray-400 italic mt-1">Not answered</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </motion.div>
       </div>
     </div>

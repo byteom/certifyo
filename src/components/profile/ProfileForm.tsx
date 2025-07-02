@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Github, Linkedin, Globe, MapPin, Phone, User, BookOpen, Languages, Key } from 'lucide-react';
 import { useThemeStore } from '../../store/themeStore';
-import { motion } from 'framer-motion';
 
 interface ProfileFormProps {
   formData: {

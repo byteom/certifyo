@@ -1,7 +1,6 @@
-
 import { Subject } from "@/types"
 export const programmingLanguages: Subject = {
-    id: 4,
+    id: 6,
     name: "Programming Languages",
     description: "Master in programming langaues, c++, java , python and more.",
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800",

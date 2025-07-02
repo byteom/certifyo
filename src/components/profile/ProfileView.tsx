@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Github, Linkedin, Globe, MapPin, Phone, Mail, User, BookOpen, Languages, Heart, Code, Globe2 } from 'lucide-react';
+import { Github, Linkedin, Globe, MapPin, Phone, Mail, User, BookOpen, Languages, Heart, Code, Globe2, Key } from 'lucide-react';
 import { useThemeStore } from '../../store/themeStore';
 
 interface ProfileViewProps {
@@ -19,6 +19,7 @@ interface ProfileViewProps {
     skills: string[] | null;
     languages: string[] | null;
     interests: string[] | null;
+    groq_api_key?: string | null;
   };
 }
 
@@ -57,7 +58,9 @@ export default function ProfileView({ profile }: ProfileViewProps) {
         <div className={`p-6 rounded-xl transition-all duration-300 ${isDarkMode ? 'bg-gray-800/50 hover:bg-gray-800/70' : 'bg-indigo-50 hover:bg-indigo-100'}`}>
           <div className="flex items-center gap-3 mb-3">
             <BookOpen className={`h-5 w-5 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
-            <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>About</h3>
+            <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              About
+            </h3>
           </div>
           <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} leading-relaxed`}>
             {profile.bio}
@@ -65,16 +68,56 @@ export default function ProfileView({ profile }: ProfileViewProps) {
         </div>
       )}
 
+      {/* API Key section */}
+      <div className={`p-6 rounded-xl transition-all duration-300 ${isDarkMode ? 'bg-gray-800/50 hover:bg-gray-800/70' : 'bg-indigo-50 hover:bg-indigo-100'}`}>
+        <div className="flex items-center gap-3 mb-3">
+          <Key className={`h-5 w-5 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
+          <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            API Keys
+          </h3>
+        </div>
+        <div className="space-y-4">
+          <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-white/80'}`}>
+            <div className="flex justify-between items-center">
+              <div>
+                <p className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  Groq API Key
+                </p>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  Used for AI Quiz generation
+                </p>
+              </div>
+              <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                profile.groq_api_key 
+                  ? isDarkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-800'
+                  : isDarkMode ? 'bg-red-900/30 text-red-400' : 'bg-red-100 text-red-800'
+              }`}>
+                {profile.groq_api_key ? 'Configured' : 'Not Set'}
+              </div>
+            </div>
+            {profile.groq_api_key && (
+              <div className="mt-2">
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  API Key: •••••••••••••••••{profile.groq_api_key.substring(profile.groq_api_key.length - 4)}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Contact info */}
       <div className={`p-6 rounded-xl grid grid-cols-1 md:grid-cols-2 gap-6 ${isDarkMode ? 'bg-gray-800/50' : 'bg-indigo-50'}`}>
         {profile.location && (
-          <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-indigo-100'}`}>
+          <div className="flex items-start">
+            <div className={`p-2 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-indigo-100'} mr-4`}>
               <MapPin className={`h-5 w-5 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
             </div>
             <div>
-              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Location</p>
-              <p className={`${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              <h3 className={`text-lg font-medium mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Location
+              </h3>
+              <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
                 {profile.location}
               </p>
             </div>
@@ -82,13 +125,15 @@ export default function ProfileView({ profile }: ProfileViewProps) {
         )}
 
         {profile.phone && (
-          <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-indigo-100'}`}>
+          <div className="flex items-start">
+            <div className={`p-2 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-indigo-100'} mr-4`}>
               <Phone className={`h-5 w-5 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
             </div>
             <div>
-              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Phone</p>
-              <p className={`${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              <h3 className={`text-lg font-medium mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Phone
+              </h3>
+              <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
                 {profile.phone}
               </p>
             </div>

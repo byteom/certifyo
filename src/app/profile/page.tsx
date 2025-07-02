@@ -25,6 +25,7 @@ interface Profile {
   } | null;
   interests: string[] | null;
   languages: string[] | null;
+  groq_api_key?: string | null;
 }
 
 export default function ProfilePage() {
@@ -45,7 +46,8 @@ export default function ProfilePage() {
       website: ''
     },
     interests: [] as string[],
-    languages: [] as string[]
+    languages: [] as string[],
+    groq_api_key: ''
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -77,6 +79,7 @@ export default function ProfilePage() {
           social_links: data.social_links || { github: '', linkedin: '', website: '' },
           interests: data.interests || [],
           languages: data.languages || [],
+          groq_api_key: data.groq_api_key || ''
         })
       }
     } catch (error: unknown) {

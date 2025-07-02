@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Github, Linkedin, Globe, MapPin, Phone, User, BookOpen, Languages } from 'lucide-react';
+import { Github, Linkedin, Globe, MapPin, Phone, User, BookOpen, Languages, Heart, Code, Globe2, Key } from 'lucide-react';
 import { useThemeStore } from '../../store/themeStore';
 
 interface ProfileFormProps {
@@ -18,6 +18,7 @@ interface ProfileFormProps {
     };
     interests: string[];
     languages: string[];
+    groq_api_key?: string;
   };
   onSubmit: (e: React.FormEvent) => void;
   onChange: (data: ProfileFormProps['formData']) => void;
@@ -29,6 +30,7 @@ export default function ProfileForm({ formData, onSubmit, onChange, onCancel }: 
   const [newSkill, setNewSkill] = useState('');
   const [newLanguage, setNewLanguage] = useState('');
   const [newInterest, setNewInterest] = useState('');
+  const [showApiKey, setShowApiKey] = useState(false);
 
   const handleAddSkill = () => {
     if (newSkill && !formData.skills.includes(newSkill)) {
@@ -138,6 +140,46 @@ export default function ProfileForm({ formData, onSubmit, onChange, onCancel }: 
             }`}
             placeholder="San Francisco, CA"
           />
+        </div>
+
+        {/* Groq API Key Field */}
+        <div className="space-y-1">
+          <label className={`flex items-center text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            <Key className="mr-2 h-4 w-4" /> Groq API Key
+          </label>
+          <div className="relative">
+            <input
+              type={showApiKey ? "text" : "password"}
+              value={formData.groq_api_key || ''}
+              onChange={(e) => onChange({ ...formData, groq_api_key: e.target.value })}
+              className={`mt-1 block w-full rounded-lg px-4 py-3 shadow-sm transition-all duration-200 focus:ring-2 focus:ring-indigo-500 border ${
+                isDarkMode
+                  ? 'bg-gray-800 border-gray-600 text-white placeholder-gray-400 focus:border-gray-500'
+                  : 'border-gray-300 placeholder-gray-500 focus:border-gray-400'
+              }`}
+              placeholder="Enter your Groq API key"
+            />
+            <button
+              type="button"
+              onClick={() => setShowApiKey(!showApiKey)}
+              className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
+                isDarkMode ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              {showApiKey ? 'Hide' : 'Show'}
+            </button>
+          </div>
+          <p className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            Required for AI Quiz feature. Get your API key at{' '}
+            <a 
+              href="https://console.groq.com/keys" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className={`${isDarkMode ? 'text-indigo-400 hover:text-indigo-300' : 'text-indigo-600 hover:text-indigo-700'} underline`}
+            >
+              Groq Console
+            </a>
+          </p>
         </div>
       </div>
 
